@@ -145,7 +145,10 @@ document.addEventListener("keyup", keyUpHandler, false);
 
 document.addEventListener("mousemove", mouseMoveHandler, false);
 
-document.addEventListener('touchmove', touchHandler, false);
+document.addEventListener('touchstart', handleTouchEvent, true);
+document.addEventListener('touchmove', handleTouchEvent, true);
+document.addEventListener('touchend', handleTouchEvent, true);
+document.addEventListener('touchcancel', handleTouchEvent, true);
 
 
 // funcion comenzar
@@ -372,8 +375,13 @@ function mouseMoveHandler(e) {
     }
 }
 
+
 function touchHandler(e) {
-    let relativeX = e.clientX - canvas.offsetLeft;
+    if (e.touches.length === 0 ) return;
+    e.preventDefault();
+    e.stopPropagation();
+    let touch = e.touches[0];
+    let relativeX = touch.pageX - canvas.offsetLeft;
     if(relativeX > 0 && relativeX < canvas.width) {
         plataformaX = relativeX - plataformaAncho/2;
     }
