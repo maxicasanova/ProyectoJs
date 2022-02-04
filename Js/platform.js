@@ -142,9 +142,10 @@ function keyUpHandler(e) {
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+
 document.addEventListener("mousemove", mouseMoveHandler, false);
 
-
+document.addEventListener('touchstart', touchHandler, false);
 
 
 // funcion comenzar
@@ -365,6 +366,13 @@ function movPlat (){
 }
 
 function mouseMoveHandler(e) {
+    let relativeX = e.clientX - canvas.offsetLeft;
+    if(relativeX > 0 && relativeX < canvas.width) {
+        plataformaX = relativeX - plataformaAncho/2;
+    }
+}
+
+function touchHandler(e) {
     let relativeX = e.clientX - canvas.offsetLeft;
     if(relativeX > 0 && relativeX < canvas.width) {
         plataformaX = relativeX - plataformaAncho/2;
