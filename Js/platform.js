@@ -145,10 +145,10 @@ document.addEventListener("keyup", keyUpHandler, false);
 
 document.addEventListener("mousemove", mouseMoveHandler, false);
 
-document.addEventListener('touchstart', handleTouchEvent, true);
-document.addEventListener('touchmove', handleTouchEvent, true);
-document.addEventListener('touchend', handleTouchEvent, true);
-document.addEventListener('touchcancel', handleTouchEvent, true);
+document.addEventListener('touchstart', touchHandler, true);
+document.addEventListener('touchmove', touchHandler, true);
+document.addEventListener('touchend', touchHandler, true);
+document.addEventListener('touchcancel', touchHandler, true);
 
 
 // funcion comenzar
@@ -378,18 +378,11 @@ function mouseMoveHandler(e) {
 
 function touchHandler(e) {
     if (e.touches.length === 0 ) return;
-    e.preventDefault();
     e.stopPropagation();
-    // let touch = e.touches[0];
-    // - canvas.offsetLeft
-    // let relativeX = e.touches[0].pageX ;
+
     for (let i = 0; i < e.touches.length; i++) {
-        plataformaX = e.touches[i].pageX - plataformaAncho;
+        plataformaX = e.touches[i].pageX - plataformaAncho/2 - canvas.offsetLeft;
     }
-    // plataformaX = e.touches[0].pageX - plataformaAncho/2;
-    // if(relativeX > 0 && relativeX < canvas.width) {
-    //     plataformaX = relativeX - plataformaAncho/2;
-    // }
 }
 
 // funcion que renderiza todo el juego
