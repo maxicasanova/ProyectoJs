@@ -380,11 +380,14 @@ function touchHandler(e) {
     if (e.touches.length === 0 ) return;
     e.preventDefault();
     e.stopPropagation();
-    let touch = e.touches[0];
-    let relativeX = touch.pageX - canvas.offsetLeft;
-    if(relativeX > 0 && relativeX < canvas.width) {
-        plataformaX = relativeX - plataformaAncho/2;
-    }
+    // let touch = e.touches[0];
+    // - canvas.offsetLeft
+    // let relativeX = e.touches[0].pageX ;
+
+    plataformaX = e.touches[0].pageX - plataformaAncho/2;
+    // if(relativeX > 0 && relativeX < canvas.width) {
+    //     plataformaX = relativeX - plataformaAncho/2;
+    // }
 }
 
 // funcion que renderiza todo el juego
