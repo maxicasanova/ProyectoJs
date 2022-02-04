@@ -162,7 +162,7 @@ function comenzar(){
     document.getElementById('myBtn').style.display = 'none';
     document.getElementById('myCanvas').style.display = "flex";
     document.getElementById('myCanvas').style.flexWrap = "wrap";
-    document.getElementById('myCanvas').style.height = "80vh";
+    document.getElementById('myCanvas').style.height = "70vh";
     if(reiniciado == 1) {
         puntos = 0;
         vidas = 3;
