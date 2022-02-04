@@ -383,7 +383,10 @@ function touchHandler(e) {
     // let touch = e.touches[0];
     // - canvas.offsetLeft
     // let relativeX = e.touches[0].pageX ;
-    plataformaX = e.touches[0].pageX - plataformaAncho/2;
+    for (let i = 0; i < e.touches.length; i++) {
+        plataformaX = e.touches[i].pageX - plataformaAncho;
+    }
+    // plataformaX = e.touches[0].pageX - plataformaAncho/2;
     // if(relativeX > 0 && relativeX < canvas.width) {
     //     plataformaX = relativeX - plataformaAncho/2;
     // }
