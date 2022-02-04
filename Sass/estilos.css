@@ -124,4 +124,10 @@ div.jugador1, div.jugador2 {
   border: 1px solid black;
   display: none;
 }
+
+@media only screen and (max-width: 500px) {
+  #myCanvas {
+    width: 90%;
+  }
+}
 /*# sourceMappingURL=estilos.css.map */
