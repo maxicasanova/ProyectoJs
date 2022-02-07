@@ -36,6 +36,7 @@ let ganador = "";
 btn.onclick = function() {
     if (document.getElementById('nombrep1').innerHTML === 'Jugador 1') {
         modal1.style.display = "block";
+        document.getElementById('player1').focus();
     } else {
         reinicio();
         comenzar();
@@ -59,8 +60,6 @@ function reinicio(){
     document.getElementById('queJugador').style.display = 'none';
     btn2.style.display = 'block';
 
-    bloques = {bloq1:0,bloq2:0,bloq3:0,bloq4:0,bloq5:0,bloq6:0,bloq7:0,bloq8:0,bloq9:0};
-    signo = {bloq1:"",bloq2:"",bloq3:"",bloq4:"",bloq5:"",bloq6:"",bloq7:"",bloq8:"",bloq9:""};
     turno = 0;
     forma1 = "";
     forma2 = "";
