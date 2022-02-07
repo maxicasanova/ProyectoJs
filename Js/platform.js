@@ -336,7 +336,7 @@ function detectarBordes(){
 
     if(x + dx > (canvas.width - radioBola) || x + dx < radioBola) {
         if ( dx < velocidadMaxima && nivel > 2){
-            dx = -dx * (1 + aceleracion/2);
+            dx = -dx * (1 + aceleracion/4);
         } else {
             dx = -dx;
         }
@@ -344,7 +344,7 @@ function detectarBordes(){
 
     if(y + dy < radioBola) {
         if(dy<velocidadMaxima && nivel > 2){
-            dy = -dy * (1 + aceleracion);
+            dy = -dy * (1 + aceleracion/10);
         } else {
             dy = -dy;
         }
@@ -352,11 +352,11 @@ function detectarBordes(){
     } else if((y + dy) >= canvas.height-radioBola-plataformaAlto*2) {
         if((x + radioBola/2) > plataformaX && ((x - radioBola/2) < (plataformaX + plataformaAncho))) {
             if(dy < velocidadMaxima && nivel > 2){
-                dy = -dy * (1 + aceleracion);
+                dy = -dy * (1 + aceleracion)/4;
             } else {
                 dy = -dy;
             }
-            velocidadPlat = velocidadPlat * (1 + (aceleracion/10))
+            velocidadPlat = velocidadPlat * (1 + (aceleracion/14))
 
             // pensarlo mejor!!
 
