@@ -7,6 +7,7 @@ let modal2 = document.getElementById("myModal2");
 let btn = document.getElementById("myBtn");
 let btn2 = document.getElementById("myBtn2");
 let btn3 = document.getElementById('botonModal2')
+let btn4 = document.getElementById('botonModal3')
 
 // cruz del modal de inicio
 let span = document.getElementsByClassName("close")[0];
@@ -90,24 +91,51 @@ let izquierda = false
 
 // grid de ladrillos
 
-let filasLad = 9;
-let columnasLad = 5;
-let anchoLad = canvas.width * 0.156;
-let altoLad = canvas.height * 0.03;
-let paddingLad = canvas.width * 0.02;
 let marginLadTop = canvas.height * 0.1;
 let marginLadIzq = canvas.width * 0.0625;
 
-let ladrillos = []
+let filasLad = 9;
+let columnasLad = Math.round(canvas.width/30);
+let anchoLad = (canvas.width / (columnasLad+2));
+let altoLad = canvas.height * 0.03;
 
-for (let c = 0; c < columnasLad; c++) {
-    ladrillos [c] = [];
-    for (let r = 0; r < filasLad; r++) {
-        ladrillos [c][r] = { x:0, y:0, estado:3 };
-        ladrillos[c][r].x = marginLadIzq + c*(anchoLad+paddingLad);
-        ladrillos[c][r].y = marginLadTop + r*(altoLad+paddingLad);
-    }
+let paddingH = 2;
+let paddingV = altoLad / 2;
+
+
+let ladrillos = []
+function creadorLadrillos(nivel){
     
+    for (let c = 0; c < columnasLad; c++) {
+        ladrillos [c] = [];
+        for (let r = 0; r < filasLad; r++) {
+            ladrillos [c][r] = { x:0, y:0, estado:1 };
+            ladrillos[c][r].x = marginLadIzq + c*(anchoLad+paddingH);
+            ladrillos[c][r].y = marginLadTop + r*(altoLad+paddingV);
+            if (nivel == 1){
+                if (c % 3 == 0){
+                    ladrillos[c][r].estado = 0;
+                }
+            }else if (nivel == 2 || nivel == 3){
+                if( r % 2 == 0){
+                    ladrillos[c][r].estado = 2;
+                    if ( nivel == 3 && c % 3 == 0){
+                        ladrillos[c][r].estado = 3;
+                    }
+                }
+            } else if (nivel == 4){
+                if(r>2 && r<6){
+                    ladrillos[c][r].estado = 2;
+                } else if (r>5){
+                    ladrillos[c][r].estado = 3;
+                }
+            } else if( nivel >= 5 && nivel <10){
+                ladrillos[c][r].estado = Math.round(Math.random()*3);
+            } else if (nivel == 10){
+
+            }
+        }
+    }
 }
 
 let puntos = 0;
@@ -116,6 +144,7 @@ let sumaLadrillos = 0;
 let comienzo = 1;
 let cambioVida = 0;
 let reiniciado = 0;
+let nivel = 1;
 
 // funciones que detectan las teclas
 
@@ -169,29 +198,32 @@ function comenzar(){
         sumaLadrillos = 0;
         comienzo = 1;
         cambioVida = 0;
-        for (let c = 0; c < columnasLad; c++) {
-            for (let r = 0; r < filasLad; r++) {
-                ladrillos[c][r].estado = 3;
-            }
-        }
+        x = canvas.width/2;
+        y = canvas.height-canvas.height*0.1;
+        dx = canvas.width * 0.0042;
+        dy = -canvas.height * 0.00625;
+        plataformaX = (canvas.width-plataformaAncho)/2;
+    } else if (reiniciado == 2){
+        cambioVida = 0;
         x = canvas.width/2;
         y = canvas.height-canvas.height*0.1;
         dx = canvas.width * 0.0042;
         dy = -canvas.height * 0.00625;
         plataformaX = (canvas.width-plataformaAncho)/2;
     }
+    creadorLadrillos(nivel);
     retardarDraw();
 }
 
 
-function reinicio(){
+function reinicio(numero){
     modal2.style.display = "none";
     document.getElementById('headline').style.marginTop = '150px';
     document.getElementById('titulo').style.display = 'block';
     document.getElementById('myBtn').style.display = 'initial';
     document.getElementById('myCanvas').style.display = 'none';
     btn2.style.display = 'block';
-    reiniciado = 1;
+    reiniciado = numero;
 }
 
 function inicial(){
@@ -282,7 +314,7 @@ function detectarLadrillos(){
                 
                 ladrillos[c][r].estado--;
                 puntos++;
-                if(ladrillos[c][r].estado == 0){
+                if(ladrillos[c][r].estado == 0 && nivel > 2){
                     dy = - dy;
                     dx = (Math.random()-0.5)*(dx+3);
                     if (dx < 1){
@@ -303,7 +335,7 @@ function detectarLadrillos(){
 function detectarBordes(){
 
     if(x + dx > (canvas.width - radioBola) || x + dx < radioBola) {
-        if ( dx < velocidadMaxima){
+        if ( dx < velocidadMaxima && nivel > 2){
             dx = -dx * (1 + aceleracion/2);
         } else {
             dx = -dx;
@@ -311,7 +343,7 @@ function detectarBordes(){
     }
 
     if(y + dy < radioBola) {
-        if(dy<velocidadMaxima){
+        if(dy<velocidadMaxima && nivel > 2){
             dy = -dy * (1 + aceleracion);
         } else {
             dy = -dy;
@@ -319,7 +351,7 @@ function detectarBordes(){
         
     } else if((y + dy) >= canvas.height-radioBola-plataformaAlto*2) {
         if((x + radioBola/2) > plataformaX && ((x - radioBola/2) < (plataformaX + plataformaAncho))) {
-            if(dy<velocidadMaxima){
+            if(dy < velocidadMaxima && nivel > 2){
                 dy = -dy * (1 + aceleracion);
             } else {
                 dy = -dy;
@@ -418,16 +450,19 @@ function draw() {
         comienzo = 0;
     } else if (sumaLadrillos == 0 ){
         modal2.style.display = "block";
+        btn4.style.display = 'block';
         document.getElementById("jugadorGanador").innerHTML = 'Ganaste ' + player1;
+        if (nivel == 10){
+            document.getElementById("jugadorGanador").innerHTML = 'Fin del Juego ' + player1;
+        } else{
+            nivel++;
+        }
     } else if (!vidas){
         modal2.style.display = "block";
+        btn4.style.display = 'none';
         document.getElementById("jugadorGanador").innerHTML = 'Perdiste ' + player1;
     }
 }
-
-
-//dibujo.
-// draw();
 
 
 
