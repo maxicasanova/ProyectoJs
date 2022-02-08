@@ -74,8 +74,6 @@ let dx = canvas.width * 0.0042;
 let dy = -canvas.height * 0.00625;
 let radioBola = canvas.height*0.016;
 let velocidadPlat = canvas.width * 0.0146;
-let aceleracion = 0.02;
-let velocidadMaxima = canvas.width * 0.08;
 
 //plataforma
 
@@ -198,18 +196,11 @@ function comenzar(){
         sumaLadrillos = 0;
         comienzo = 1;
         cambioVida = 0;
-        x = canvas.width/2;
-        y = canvas.height-canvas.height*0.1;
-        dx = canvas.width * 0.0042;
-        dy = -canvas.height * 0.00625;
-        plataformaX = (canvas.width-plataformaAncho)/2;
+        nivel = 1;
+        inicial();
     } else if (reiniciado == 2){
         cambioVida = 0;
-        x = canvas.width/2;
-        y = canvas.height-canvas.height*0.1;
-        dx = canvas.width * 0.0042;
-        dy = -canvas.height * 0.00625;
-        plataformaX = (canvas.width-plataformaAncho)/2;
+        inicial();
     }
     creadorLadrillos(nivel);
     retardarDraw();
@@ -227,10 +218,11 @@ function reinicio(numero){
 }
 
 function inicial(){
+    let valoresDx = [canvas.width * 0.0042, -canvas.width * 0.0042, canvas.width * 0.0022, -canvas.width * 0.0022]
     x = canvas.width/2;
     y = canvas.height-canvas.height*0.1;
-    dx = canvas.width * 0.0042;
-    dy = -canvas.height * 0.00625;
+    dx = valoresDx[Math.round(Math.random()*3)];
+    dy = -canvas.height * 0.00325 - (nivel-1)*0.01;
     plataformaX = (canvas.width-plataformaAncho)/2;
     retardarDraw();
 }
@@ -250,8 +242,19 @@ function dibujoPelota() {
 
 function dibujoPlataforma() {
     ctx.beginPath();
-    ctx.rect((plataformaX), canvas.height-plataformaAlto * 2, plataformaAncho, plataformaAlto);
-    ctx.fillStyle = "#533E67";
+    ctx.arc((plataformaX + plataformaAncho*0.2), (canvas.height-(plataformaAlto *3/2)), plataformaAlto/2, Math.PI/2, Math.PI*3/2);
+    ctx.fillStyle = "#F46B6B";
+    ctx.fill();
+    ctx.arc((plataformaX + plataformaAncho), (canvas.height-(plataformaAlto *3/2)), plataformaAlto/2, Math.PI*3/2, Math.PI/2);
+    ctx.fillStyle = "#F46B6B";
+    ctx.fill();
+    ctx.strokeStyle = "black";
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.beginPath();
+    ctx.rect((plataformaX + plataformaAncho*0.2), canvas.height-plataformaAlto * 2, (plataformaAncho*0.8), plataformaAlto);
+    ctx.fillStyle = "#B7A9C5";
     ctx.fill();
     ctx.strokeStyle = "black";
     ctx.stroke();
@@ -293,14 +296,24 @@ function dibujoLadrillos(){
 
 function dibujoPuntaje() {
     ctx.font = "16px Arial";
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "black";
     ctx.fillText("Puntuacion: "+puntos, 8, 20);
 }
 
 function dibujoVidas() {
     ctx.font = "16px Arial";
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "black";
     ctx.fillText("Vidas: "+vidas, canvas.width-65, 20);
+}
+
+function dibujoNivel() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "black";
+    ctx.fillText("Nivel: "+nivel, canvas.width-165, 20);
+    ctx.moveTo(0, 25);
+    ctx.lineTo(canvas.width, 25);
+    ctx.strokeStyle = "black";
+    ctx.stroke();
 }
 
 
@@ -316,10 +329,8 @@ function detectarLadrillos(){
                 puntos++;
                 if(ladrillos[c][r].estado == 0 && nivel > 2){
                     dy = - dy;
-                    dx = (Math.random()-0.5)*(dx+3);
-                    if (dx < 1){
-                        dx = -2;
-                    }
+                    let sentidoAleatorio = [1,-1]
+                    dx = sentidoAleatorio[Math.round(Math.random())];
                 }else {
                     dy = -dy;
                 }
@@ -335,49 +346,30 @@ function detectarLadrillos(){
 function detectarBordes(){
 
     if(x + dx > (canvas.width - radioBola) || x + dx < radioBola) {
-        if ( dx < velocidadMaxima && nivel > 2){
-            dx = -dx * (1 + aceleracion/4);
-        } else {
-            dx = -dx;
-        }
+        dx = -dx
     }
 
-    if(y + dy < radioBola) {
-        if(dy<velocidadMaxima && nivel > 2){
-            dy = -dy * (1 + aceleracion/10);
-        } else {
-            dy = -dy;
-        }
+    if(y + dy < (radioBola+25)) {
+        dy = -dy;
         
     } else if((y + dy) >= canvas.height-radioBola-plataformaAlto*2) {
-        if((x + radioBola/2) > plataformaX && ((x - radioBola/2) < (plataformaX + plataformaAncho))) {
-            if(dy < velocidadMaxima && nivel > 2){
-                dy = -dy * (1 + aceleracion)/4;
-            } else {
+        if((x + radioBola/2) > (plataformaX + plataformaAncho*0.2) && ((x - radioBola/2) < (plataformaX + plataformaAncho*0.8))) {
                 dy = -dy;
+
+        } else if(((x + radioBola/2) > plataformaX) && ((x - radioBola/2) < (plataformaX + plataformaAncho*0.2))){
+            if (dx<0){
+                dy = -dy;
+            }else{
+                dy = -dy;
+                dx = -dx * 1.05;
             }
-            velocidadPlat = velocidadPlat * (1 + (aceleracion/14))
-
-            // pensarlo mejor!!
-
-        // } else if((x > plataformaX) && (x < (plataformaX + plataformaAncho/4))){
-        //     if (dx<0){
-        //         dy = -dy;
-        //         velocidadPlat = velocidadPlat * (1 + (aceleracion/10))
-        //     }else{
-        //         dy = -dy;
-        //         dx = -dx;
-        //         velocidadPlat = velocidadPlat * (1 + (aceleracion/10))
-            // }
-        // } else if((x > (plataformaX*3/4)) && x < (plataformaX + plataformaAncho)){
-        //     if (dx>0){
-        //         dy = -dy;
-        //         velocidadPlat = velocidadPlat * (1 + (aceleracion/10))
-        //     }else{
-        //         dy = -dy;
-        //         dx = -dx;
-        //         velocidadPlat = velocidadPlat * (1 + (aceleracion/10))
-        //     }
+        } else if(((x + radioBola/2) > (plataformaX + plataformaAncho*0.8)) && ((x - radioBola/2) < (plataformaX + plataformaAncho))){
+            if (dx>0){
+                dy = -dy;
+            }else{
+                dy = -dy;
+                dx = -dx * 1.05;
+            }
         }else {
             if(y + dy > canvas.height-plataformaAlto){
                 vidas--;
@@ -428,6 +420,7 @@ function draw() {
     dibujoPelota();
     dibujoPuntaje();
     dibujoVidas();
+    dibujoNivel();
     detectarBordes();
     detectarLadrillos();
 
@@ -450,7 +443,7 @@ function draw() {
         comienzo = 0;
     } else if (sumaLadrillos == 0 ){
         modal2.style.display = "block";
-        btn4.style.display = 'block';
+        btn4.style.display = 'flex';
         document.getElementById("jugadorGanador").innerHTML = 'Ganaste ' + player1;
         if (nivel == 10){
             document.getElementById("jugadorGanador").innerHTML = 'Fin del Juego ' + player1;
