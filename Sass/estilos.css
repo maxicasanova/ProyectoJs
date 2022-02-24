@@ -4,6 +4,10 @@
   margin-left: 0 !important;
 }
 
+p {
+  margin: 0;
+}
+
 div.caja {
   margin-top: 50px;
   padding: 20px;
@@ -17,7 +21,7 @@ div.caja {
   margin: auto;
 }
 
-section div.card {
+section div.tarjeta {
   width: 150px;
   height: 150px;
   cursor: pointer;
@@ -133,5 +137,111 @@ div.jugador1, div.jugador2 {
   #myCanvas {
     width: 90%;
   }
+}
+
+#cuerpoJuego, #variablesJuego {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#cuerpoJuego ul, #variablesJuego ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  gap: 20px;
+}
+
+#solitario {
+  width: 800px;
+  height: 400px;
+  background-color: green;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+   -ms-user-select: none;
+       user-select: none;
+}
+
+.columna {
+  width: 58px;
+  height: 368px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.subcolumna {
+  width: 58px;
+  height: 80px;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: inline-block;
+  border: solid 1px #aaa;
+  border-radius: 9px;
+}
+
+.subcolumna .card {
+  position: absolute;
+}
+
+.card {
+  border: solid 1px #aaa;
+  border-radius: 9px;
+  width: 58px;
+  height: 80px;
+  background-color: white;
+  cursor: -webkit-grab !important;
+  cursor: grab !important;
+}
+
+.card .subcolumna {
+  position: absolute;
+}
+
+.card .value {
+  font-size: 15pt;
+  font-family: sans-serif;
+}
+
+.card.diamonds {
+  color: red;
+  background-image: url(../media/solitario/diamonds.png);
+}
+
+.card.hearts {
+  color: red;
+  background-image: url(../media/solitario/hearts.png);
+}
+
+.card.clubs {
+  color: black;
+  background-image: url(../media/solitario/clubs.png);
+}
+
+.card.spades {
+  color: black;
+  background-image: url(../media/solitario/spades.png);
+}
+
+.dorso p {
+  visibility: hidden;
+}
+
+.hide {
+  display: none;
+}
+
+#mazo1 {
+  background-color: black;
+}
+
+#mazo1 .card {
+  display: none;
 }
 /*# sourceMappingURL=estilos.css.map */

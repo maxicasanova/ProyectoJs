@@ -4,6 +4,10 @@
     margin-left: 0!important;
 }
 
+p{
+    margin: 0;
+}
+
 div.caja{
     margin-top: 50px;
     padding: 20px;
@@ -17,7 +21,7 @@ div.caja{
     margin:auto;
 }
 
-section div.card{
+section div.tarjeta{
     width: 150px; 
     height: 150px;
     cursor: pointer;
@@ -118,5 +122,98 @@ div.jugador1, div.jugador2{
 @media only screen and (max-width: 400px){
     #myCanvas{
         width: 90%;
+    }
+}
+
+#cuerpoJuego, #variablesJuego{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    & ul{
+        display: flex;
+        justify-content: space-around;
+        gap: 20px;
+    }
+}
+
+#solitario{
+    width: 800px;
+    height: 400px;
+    background-color: green;
+    -webkit-user-select:none;
+    user-select:none;
+}
+
+.columna{
+    width: 58px;
+    height: 368px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.subcolumna{
+    width: 58px;
+    height: 80px;
+    background-color:rgba(0,0,0,0.5);
+    display: inline-block;
+    border: solid 1px #aaa;
+    border-radius: 9px;
+    & .card{
+        position: absolute;
+    }
+}
+
+.card{
+    border: solid 1px #aaa;
+    border-radius: 9px;
+    width: 58px;
+    height: 80px;
+    background-color: white;
+    cursor: grab !important;
+    
+    & .subcolumna{
+        position:absolute;
+    }
+
+    & .value{
+        font-size:15pt;
+        font-family: sans-serif;
+    }
+
+    &.diamonds{
+        color: red;
+        background-image: url(../media/solitario/diamonds.png);
+    }
+
+    &.hearts{
+        color: red;
+        background-image: url(../media/solitario/hearts.png);
+    }
+
+    &.clubs{
+        color: black;
+        background-image: url(../media/solitario/clubs.png);
+    }
+
+    &.spades{
+        color: black;
+        background-image: url(../media/solitario/spades.png);
+    }
+}
+
+.dorso p{
+    visibility: hidden;
+}
+
+.hide{
+    display: none;
+}
+
+
+#mazo1{
+    background-color:black;
+
+    & .card{
+        display: none;
     }
 }
