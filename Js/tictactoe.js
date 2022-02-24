@@ -30,6 +30,7 @@ let player2 = '';
 let dificultad = 2;
 let jugadores = '';
 let ganador = "";
+let perdedor = '';
 
 // cuando se aprieta boton de inicio se abre modal de inicio
 
@@ -184,13 +185,18 @@ function comprobacion() {
             document.getElementById('jugadorGanador').innerHTML = ganador;
             document.getElementById('jugadorGanador').style.display = 'block';
             modal2.style.display = "block";
+            // localStorage.setItem('ticTacWin',`${ganador}`)
+            // localStorage.setItem('ticTacLoss', `${perdedor}`)
             break;
         }
     }
     if (bloques.bloq1 == 1 && bloques.bloq2 == 1 && bloques.bloq3 == 1 && bloques.bloq4 == 1 && bloques.bloq5 == 1 && bloques.bloq6 == 1 && bloques.bloq7 == 1 && bloques.bloq8 == 1 && bloques.bloq9 == 1 && ganador === '') {
         document.getElementById('jugadorGanador').innerHTML = "Empate";
+        // let empatados = [`${ganador}`, `${perdedor}`]
+        // localStorage.setItem('ticTacDraw', `${empatados}`)
         document.getElementById('jugadorGanador').style.display = 'block';
         modal2.style.display = "block";
+
     }
 
 }
@@ -303,5 +309,22 @@ const juegoAutonomo = async (dificultad) => {
     }
 }
 
+
+// function guardarDatos(resultado) {
+//     switch (resultado) {
+//         case 'ganador':
+
+//             localStorage.getItem('ticTacWin') == undefined ? localStorage.setItem() : localStorage.setItem();
+//             // localStorage.setItem('ticTacWin',`${ganador}`)
+//             // localStorage.setItem('ticTacLoss', `${perdedor}`)
+//             break;
+    
+//         case 'empate':
+        
+//             break;
+//         default:
+//             break;
+//     }
+// }
 
 //  falta comprobacion de formularios en modal de inicio.

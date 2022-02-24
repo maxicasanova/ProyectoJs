@@ -27,6 +27,8 @@ section div.tarjeta {
   cursor: pointer;
   background-position: center;
   background-size: cover;
+  border-radius: 5px;
+  border: 1px solid grey;
 }
 
 .headline {
