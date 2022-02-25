@@ -219,3 +219,9 @@ div.jugador1, div.jugador2{
         display: none;
     }
 }
+
+
+#ranTictactoe ul {
+    display: flex;
+    gap: 20px;
+}

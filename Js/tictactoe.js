@@ -1,3 +1,10 @@
+// definciion de variables del LocalStorage
+
+let listaGanadores = JSON.parse(localStorage.getItem('ticTacWin'));
+let listaEmpates = JSON.parse(localStorage.getItem('ticTacDraw'));
+let listaPerdedores = JSON.parse(localStorage.getItem('ticTacLoss'));
+
+
 // variables que afectan el DOM
 
 // modales
@@ -67,6 +74,9 @@ function reinicio(){
     player1 = '';
     player2 = '';
     ganador = "";
+    perdedor = '';
+    bloques = {bloq1:0,bloq2:0,bloq3:0,bloq4:0,bloq5:0,bloq6:0,bloq7:0,bloq8:0,bloq9:0}
+    signo = {bloq1:"",bloq2:"",bloq3:"",bloq4:"",bloq5:"",bloq6:"",bloq7:"",bloq8:"",bloq9:""}
 
     for (let i = 0; i < 9; i++) {
         document.getElementById(`tarjetas${(i+1)}`).style.backgroundImage = '';
@@ -166,7 +176,7 @@ const condicionGanar = [
 // funcion que detecta cuando terminar el juego
 
 function comprobacion() {
-    let ganador = "";
+    ganador = "";
     for (let i = 0; i < 8; i++) {
         condA = condicionGanar[i][0];
         condB = condicionGanar[i][1];
@@ -179,21 +189,21 @@ function comprobacion() {
         if (signo[`bloq${condA}`] == signo[`bloq${condB}`] && signo[`bloq${condB}`] == signo[`bloq${condC}`]) {
             if (forma1 == signo[`bloq${condC}`]){
                 ganador = player1;
+                perdedor = player2;
             } else {
                 ganador = player2;
+                perdedor = player1;
             }
+            guardarDatos('ganador');
             document.getElementById('jugadorGanador').innerHTML = ganador;
             document.getElementById('jugadorGanador').style.display = 'block';
             modal2.style.display = "block";
-            // localStorage.setItem('ticTacWin',`${ganador}`)
-            // localStorage.setItem('ticTacLoss', `${perdedor}`)
             break;
         }
     }
     if (bloques.bloq1 == 1 && bloques.bloq2 == 1 && bloques.bloq3 == 1 && bloques.bloq4 == 1 && bloques.bloq5 == 1 && bloques.bloq6 == 1 && bloques.bloq7 == 1 && bloques.bloq8 == 1 && bloques.bloq9 == 1 && ganador === '') {
+        guardarDatos('empate')
         document.getElementById('jugadorGanador').innerHTML = "Empate";
-        // let empatados = [`${ganador}`, `${perdedor}`]
-        // localStorage.setItem('ticTacDraw', `${empatados}`)
         document.getElementById('jugadorGanador').style.display = 'block';
         modal2.style.display = "block";
 
@@ -310,21 +320,76 @@ const juegoAutonomo = async (dificultad) => {
 }
 
 
-// function guardarDatos(resultado) {
-//     switch (resultado) {
-//         case 'ganador':
+function guardarDatos(resultado) {
+    switch (resultado) {
+        case 'ganador':
+            let lugarGanador = -1;
+            if(listaGanadores == null){
+                listaGanadores = [{nombre: ganador, veces:1}];
+            } else{
+                for (let i = 0; i < listaGanadores.length; i++) {
+                    if (listaGanadores[i].nombre == ganador) {
+                        lugarGanador = i;
+                        break;
+                    }
+                }
+                if (lugarGanador > -1){
+                    listaGanadores[lugarGanador].veces ++;
+                } else {
+                    listaGanadores.push({nombre: ganador, veces:1});
+                }
+            }
+            localStorage.setItem('ticTacWin', JSON.stringify(listaGanadores));
 
-//             localStorage.getItem('ticTacWin') == undefined ? localStorage.setItem() : localStorage.setItem();
-//             // localStorage.setItem('ticTacWin',`${ganador}`)
-//             // localStorage.setItem('ticTacLoss', `${perdedor}`)
-//             break;
+            let lugarPerdedor = -1;
+            if(listaPerdedores == null){
+                listaPerdedores = [{nombre: perdedor, veces:1}];
+            } else{
+                for (let i = 0; i < listaPerdedores.length; i++) {
+                    if (listaPerdedores[i].nombre == perdedor) {
+                        lugarPerdedor = i;
+                        break;
+                    }
+                }
+                if (lugarPerdedor > -1){
+                    listaPerdedores[lugarPerdedor].veces ++;
+                } else {
+                    listaPerdedores.push({nombre: perdedor, veces:1});
+                }
+            }
+            localStorage.setItem('ticTacLoss', JSON.stringify(listaPerdedores));
+            break;
     
-//         case 'empate':
-        
-//             break;
-//         default:
-//             break;
-//     }
-// }
+        case 'empate':
+            let lugarEmpate1 = -1;
+            let lugarEmpate2 = -1;
+            if(listaEmpates == null){
+                listaEmpates = [{nombre: player1, veces:1},{nombre: player2, veces:1}];
+            } else{
+                for (let i = 0; i < listaEmpates.length; i++) {
+                    if (listaEmpates[i].nombre == player1) {
+                        lugarEmpate1 = i;
+                    }
+                    if (listaEmpates[i].nombre == player2) {
+                        lugarEmpate2 = i;
+                    }
+                }
+                if (lugarEmpate1 > -1){
+                    listaEmpates[lugarEmpate1].veces ++;
+                } else {
+                    listaEmpates.push({nombre: player1, veces:1});
+                }
+                if (lugarEmpate2 > -1){
+                    listaEmpates[lugarEmpate2].veces ++;
+                } else {
+                    listaEmpates.push({nombre: player2, veces:1});
+                }
+            }
+            localStorage.setItem('ticTacDraw', JSON.stringify(listaEmpates));
+            break;
+        default:
+            break;
+    }
+}
 
 //  falta comprobacion de formularios en modal de inicio.
