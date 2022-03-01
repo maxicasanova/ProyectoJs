@@ -4,6 +4,10 @@
   margin-left: 0 !important;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 p {
   margin: 0;
 }
@@ -141,19 +145,7 @@ div.jugador1, div.jugador2 {
   }
 }
 
-#cuerpoJuego, #variablesJuego {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-#cuerpoJuego ul, #variablesJuego ul {
+#cuerpoJuego ul {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -188,11 +180,11 @@ div.jugador1, div.jugador2 {
   border-radius: 9px;
 }
 
-.subcolumna .card {
+.subcolumna .carta {
   position: absolute;
 }
 
-.card {
+.carta {
   border: solid 1px #aaa;
   border-radius: 9px;
   width: 58px;
@@ -202,31 +194,31 @@ div.jugador1, div.jugador2 {
   cursor: grab !important;
 }
 
-.card .subcolumna {
+.carta .subcolumna {
   position: absolute;
 }
 
-.card .value {
+.carta .value {
   font-size: 15pt;
   font-family: sans-serif;
 }
 
-.card.diamonds {
+.carta.diamonds {
   color: red;
   background-image: url(../media/solitario/diamonds.png);
 }
 
-.card.hearts {
+.carta.hearts {
   color: red;
   background-image: url(../media/solitario/hearts.png);
 }
 
-.card.clubs {
+.carta.clubs {
   color: black;
   background-image: url(../media/solitario/clubs.png);
 }
 
-.card.spades {
+.carta.spades {
   color: black;
   background-image: url(../media/solitario/spades.png);
 }
@@ -235,15 +227,11 @@ div.jugador1, div.jugador2 {
   visibility: hidden;
 }
 
-.hide {
-  display: none;
-}
-
 #mazo1 {
   background-color: black;
 }
 
-#mazo1 .card {
+#mazo1 .carta {
   display: none;
 }
 

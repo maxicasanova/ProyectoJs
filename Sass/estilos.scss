@@ -4,6 +4,10 @@
     margin-left: 0!important;
 }
 
+.hidden{
+    visibility: hidden;
+}
+
 p{
     margin: 0;
 }
@@ -127,10 +131,7 @@ div.jugador1, div.jugador2{
     }
 }
 
-#cuerpoJuego, #variablesJuego{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+#cuerpoJuego{
     & ul{
         display: flex;
         justify-content: space-around;
@@ -160,12 +161,12 @@ div.jugador1, div.jugador2{
     display: inline-block;
     border: solid 1px #aaa;
     border-radius: 9px;
-    & .card{
+    & .carta{
         position: absolute;
     }
 }
 
-.card{
+.carta{
     border: solid 1px #aaa;
     border-radius: 9px;
     width: 58px;
@@ -207,15 +208,11 @@ div.jugador1, div.jugador2{
     visibility: hidden;
 }
 
-.hide{
-    display: none;
-}
-
 
 #mazo1{
     background-color:black;
 
-    & .card{
+    & .carta{
         display: none;
     }
 }
