@@ -15,8 +15,6 @@ let mazo1 = '';
 let mazo2 = '';
 
 let btn = document.getElementById("myBtn");
-// let btn2 = document.getElementById("myBtn2");
-
 
 // variables globales.
 
@@ -338,7 +336,9 @@ function mostrarPuntos(){
     puntosDom.innerHTML = `Puntuacion: ${puntos}`;
 }
 
-function clock() {// We create a new Date object and assign it to a variable called "time".
+// funcion para calcular el tiempo de juego.
+
+function clock() {
     let time1 = Date.now();
     time1= new Date(time1 - time0),
         
@@ -360,6 +360,8 @@ function clock() {// We create a new Date object and assign it to a variable cal
 }
 
 
+// funciones para mostrar y ocultar indicaciones del juego.
+
 function ocultarObjetos(objetivo){
     objetivo.classList.add('hidden');
 }
@@ -368,25 +370,31 @@ function mostrarObjetos (objetivo){
     objetivo.classList.remove('hidden');
 }
 
+// funciones para controlar si existe un registro en el localstorage y despues funcion para mostrar mensaje de ganador.
+
 function controlStorage () {
-    listaSolitario? 'append':'new';
+    if(listaSolitario){
+        listaSolitario.push({nombre: nombreDom.innerHTML, tiempo: tiempoDom.innerHTML, puntos: puntos});
+        console.log('push')
+    }else{
+        listaSolitario = [{nombre: nombreDom.innerHTML, tiempo: tiempoDom.innerHTML, puntos: puntos}];
+        console.log('otro')
+    }
+    localStorage.setItem('solitario', JSON.stringify(listaSolitario));
 }
 
 function ganar(){
     clearInterval(myInterval);
-    
+    controlStorage();
     Swal.fire({
-        title: 'Felicidades!',
+        title: `Felicidades! ${nombreDom.innerHTML}`,
         text: 'Ganaste la partida',
         icon: 'success',
         confirmButtonText: 'Bravo'
-    })
+    });
 }
 
-// definir funcion para determinar ganador
-// ordenar el script para que las variables los listener y las funciones esten juntas.
+// evaluar un boton de deshacer.
 // corregir cuando la suelto en mazo2.
-// contador de movimientos
-// contador de tiempo
 //animacion de final partida.
-//set dragImage!.
+//set dragImage

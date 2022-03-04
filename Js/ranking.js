@@ -1,10 +1,13 @@
 // section del tic tac toe.
 
 let ticTac = document.querySelector('#ranTictactoe');
+let solitario = document.querySelector('#ranSolitario')
 
 let ticTacRankWin = JSON.parse(window.localStorage.getItem('ticTacWin'));
 let ticTacRankDraw = JSON.parse(window.localStorage.getItem('ticTacDraw'));
 let ticTacRankLoss = JSON.parse(window.localStorage.getItem('ticTacLoss'));
+
+let listaSolitario = JSON.parse(window.localStorage.getItem('solitario'));
 
 
 if(ticTacRankWin || ticTacRankDraw || ticTacRankLoss){
@@ -57,6 +60,21 @@ if(ticTacRankLoss){
             fila.innerHTML = `<td>${cadaUno.nombre}</td><td></td><td></td><td>${cadaUno.veces}</td>`;
             ticTac.appendChild(fila);
         }
+    }
+}
+
+// section del solitario
+
+if(listaSolitario){
+    const encabezado = document.createElement('tr');
+    encabezado.innerHTML = '<th>Nombre</th><th>Tiempo</th><th>Puntos</th>';
+    solitario.appendChild(encabezado);
+    for (let i = 0; i < listaSolitario.length; i++) {
+        let cadaUno = listaSolitario[i];
+        let fila = document.createElement("tr");
+        fila.id = cadaUno.nombre;
+        fila.innerHTML = `<td>${cadaUno.nombre}</td><td>${cadaUno.veces}</td><td>${cadaUno.veces}</td>`;
+        solitario.appendChild(fila);
     }
 }
 

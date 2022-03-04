@@ -1,55 +1,4 @@
 
-// modales
-let modal1 = document.getElementById("myModal");
-let modal2 = document.getElementById("myModal2");
-
-// botones
-let btn = document.getElementById("myBtn");
-let btn2 = document.getElementById("myBtn2");
-let btn3 = document.getElementById('botonModal2')
-let btn4 = document.getElementById('botonModal3')
-
-// cruz del modal de inicio
-let span = document.getElementsByClassName("close")[0];
-let span2 = document.getElementsByClassName("close")[1];
-
-// boton dentro de modal de inicio que comienza el juego
-let btnComenzar = document.getElementById("botonModal");
-
-// cuando se aprieta boton de inicio se abre modal de inicio
-
-btn.onclick = function() {
-    if (document.getElementById('nombrep1').innerHTML === 'Jugador 1') {
-        modal1.style.display = "block";
-    } else {
-        comenzar();
-        btn2.style.display = 'none';
-    }
-}
-
-btn2.onclick = function(){
-    modal1.style.display = "block";
-    btn2.style.display = 'none';
-}
-
-// Cuando se clickea <span> (x), se cierran los modales
-span.onclick = function() {
-    modal1.style.display = "none";
-    }
-    
-    span2.onclick = function() {
-        modal2.style.display = "none";
-        }
-    
-    // Si se aprieta fuera del modal se cierra.
-    window.onclick = function(event) {
-        if (event.target == modal1) {
-            modal1.style.display = "none";
-        }
-    }
-
-// para manejar los puntos
-
 let player1 = '';
 const delay = ms => new Promise(res => setTimeout(res, ms));
 const retardarDraw = async () => {
@@ -57,12 +6,10 @@ const retardarDraw = async () => {
     draw();
 }
 
-
 // canvas
 
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
-
 
 //posicion inicial
 
@@ -80,7 +27,6 @@ let velocidadPlat = canvas.width * 0.0146;
 let plataformaAlto = canvas.height*0.02;
 let plataformaAncho = canvas.width*0.15;
 let plataformaX = (canvas.width-plataformaAncho)/2;
-
 
 // capturadores de teclas
 
@@ -144,6 +90,36 @@ let cambioVida = 0;
 let reiniciado = 0;
 let nivel = 1;
 
+// botones
+
+let btn = document.getElementById("myBtn");
+let btn2 = document.getElementById("myBtn2");
+
+
+// cuando se aprieta boton de inicio se abre modal de inicio
+
+btn.onclick = function() {
+
+    Swal.fire({
+        title: 'Bienvenido!',
+        input: 'text',
+        inputLabel:'Ingrese su nombre',
+        inputPlaceholder: 'Jugador1',
+        showCloseButton:true,
+        confirmButtonText: 'Empezamos',
+        buttonsStyling: false,
+        customClass: {
+            confirmButton: 'btn btn-warning',
+        }
+    });
+    Swal.getConfirmButton().onclick = function() {
+        player1 = Swal.getInput().value;
+        Swal.close();
+        comenzar();
+    }
+}
+
+
 // funciones que detectan las teclas
 
 function keyDownHandler(e) {
@@ -169,9 +145,7 @@ function keyUpHandler(e) {
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
-
 document.addEventListener("mousemove", mouseMoveHandler, false);
-
 document.addEventListener('touchstart', touchHandler, true);
 document.addEventListener('touchmove', touchHandler, true);
 document.addEventListener('touchend', touchHandler, true);
@@ -181,39 +155,72 @@ document.addEventListener('touchcancel', touchHandler, true);
 // funcion comenzar
 
 function comenzar(){
-    player1 = document.querySelector('#player1').value;
     document.getElementById('nombrep1').innerHTML = player1;
-    modal1.style.display = "none";
-    document.getElementById('headline').style.margin = '10px';
-    document.getElementById('titulo').style.display = 'none';
-    document.getElementById('myBtn').style.display = 'none';
-    document.getElementById('myCanvas').style.display = "flex";
-    document.getElementById('myCanvas').style.flexWrap = "wrap";
-    document.getElementById('myCanvas').style.height = "70vh";
+    // document.getElementById('headline').style.margin = '10px';
+    // document.getElementById('titulo').style.display = 'none';
+    // btn.style.display = 'none';
+    canvas.style.display = "flex";
+    canvas.style.flexWrap = "wrap";
     if(reiniciado == 1) {
         puntos = 0;
         vidas = 3;
         sumaLadrillos = 0;
         comienzo = 1;
-        cambioVida = 0;
         nivel = 1;
-        inicial();
-    } else if (reiniciado == 2){
-        cambioVida = 0;
-        inicial();
-    }
+    } 
+    // else if (reiniciado == 2){
+    //     // cambioVida = 0;
+    // }
     creadorLadrillos(nivel);
-    retardarDraw();
+    inicial();
 }
 
-
 function reinicio(numero){
-    modal2.style.display = "none";
+    if (numero == 1){
+        Swal.fire({
+            title: 'Perdiste!',
+            showCloseButton:true,
+            confirmButtonText: 'Jugar de nuevo',
+            buttonsStyling: false,
+            customClass: {
+                confirmButton: 'btn btn-warning',
+            }
+        });
+    } else if (numero == 2){
+        if (nivel == 10){
+            Swal.fire({
+                title: 'Perdiste!',
+                showCloseButton:true,
+                confirmButtonText: 'Jugar de nuevo',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-warning',
+                }
+                // ver boton de cancelacion o salir.
+            });
+            numero = 1;
+        } else{
+            nivel++;
+            Swal.fire({
+                title: 'Ganaste!',
+                showCloseButton:true,
+                confirmButtonText: 'Siguiente Nivel',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-warning',
+                }
+            });
+        }
+    }
+    Swal.getConfirmButton().onclick = function() {
+        Swal.close();
+        comenzar();
+    }
     document.getElementById('headline').style.marginTop = '150px';
     document.getElementById('titulo').style.display = 'block';
-    document.getElementById('myBtn').style.display = 'initial';
-    document.getElementById('myCanvas').style.display = 'none';
-    btn2.style.display = 'block';
+    btn.style.display = 'initial';
+    canvas.style.display = 'none';
+    // btn2.style.display = 'block';
     reiniciado = numero;
 }
 
@@ -222,11 +229,10 @@ function inicial(){
     x = canvas.width/2;
     y = canvas.height-canvas.height*0.1;
     dx = valoresDx[Math.round(Math.random()*3)];
-    dy = -canvas.height * 0.00325 - (nivel-1)*0.01;
+    dy = -canvas.height * 0.00425 - (nivel-1)*0.01;
     plataformaX = (canvas.width-plataformaAncho)/2;
     retardarDraw();
 }
-
 
 // dibujo de cada parte
 
@@ -399,7 +405,6 @@ function mouseMoveHandler(e) {
     }
 }
 
-
 function touchHandler(e) {
     if (e.touches.length === 0 ) return;
     e.stopPropagation();
@@ -433,7 +438,6 @@ function draw() {
             sumaLadrillos += ladrillos[c][r].estado 
         }
     }
-
     if ((sumaLadrillos > 0 && vidas > 0) || comienzo == 1)  {
         if (cambioVida == 0){
             requestAnimationFrame(draw);
@@ -442,28 +446,19 @@ function draw() {
         }
         comienzo = 0;
     } else if (sumaLadrillos == 0 ){
-        modal2.style.display = "block";
-        btn4.style.display = 'flex';
-        document.getElementById("jugadorGanador").innerHTML = 'Ganaste ' + player1;
-        if (nivel == 10){
-            document.getElementById("jugadorGanador").innerHTML = 'Fin del Juego ' + player1;
-        } else{
-            nivel++;
-        }
+        reinicio(2);
     } else if (!vidas){
-        modal2.style.display = "block";
-        btn4.style.display = 'none';
-        document.getElementById("jugadorGanador").innerHTML = 'Perdiste ' + player1;
+        reinicio(1);
     }
 }
 
 
-
-// me falta direccion aleatoria de comienzo.
 //seleccion de mouse o teclas.
-// niveles.
-// dificultades. ( velocidad pelota, tamano de plataforma)
-
-// ver bug de los bordes!
-
 // 3 2 1 antes de comenzar.
+
+// ver velocidad de inicio.
+// definir clases para limpiar el codigo
+// anotar puntos para el ranking.
+// swal en vez de los modales.
+
+// agregar una pausa! window.cancelAnimationFrame(requestID); probar!

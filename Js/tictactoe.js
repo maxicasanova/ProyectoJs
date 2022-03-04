@@ -4,24 +4,11 @@ let listaGanadores = JSON.parse(localStorage.getItem('ticTacWin'));
 let listaEmpates = JSON.parse(localStorage.getItem('ticTacDraw'));
 let listaPerdedores = JSON.parse(localStorage.getItem('ticTacLoss'));
 
-
 // variables que afectan el DOM
 
-// modales
-let modal1 = document.getElementById("myModal");
-let modal2 = document.getElementById("myModal2");
-
 // botones
+
 let btn = document.getElementById("myBtn");
-let btn2 = document.getElementById("myBtn2");
-let btn3 = document.getElementById('botonModal2')
-
-// cruz del modal de inicio
-let span = document.getElementsByClassName("close")[0];
-let span2 = document.getElementsByClassName("close")[1];
-
-// boton dentro de modal de inicio que comienza el juego
-let btnComenzar = document.getElementById("botonModal");
 
 
 // variables globales
@@ -36,43 +23,66 @@ let player1 = '';
 let player2 = '';
 let dificultad = 2;
 let jugadores = '';
+let selection = '';
 let ganador = "";
 let perdedor = '';
 
 // cuando se aprieta boton de inicio se abre modal de inicio
 
+
 btn.onclick = function() {
-    if (document.getElementById('nombrep1').innerHTML === 'Jugador 1') {
-        modal1.style.display = "block";
-        document.getElementById('player1').focus();
-    } else {
-        reinicio();
+    let inputOptions = {circulo:'circulo', cruz: 'cruz'}
+    Swal.fire({
+        title: 'Bienvenido!',
+        html:
+            '<input id="swal-input1" class="swal2-input" placeholder = "Jugador 1">' + '<br>' +
+            '<input id="swal-input2" class="swal2-input" placeholder = "Jugador 2">' + 
+            '<input type="radio" id="unJugador" name="jugadores" value="unJugador">' +
+            '<label for="unJugador" class="radio">Un Jugador</label>' +
+            '<input type="radio" id="dosJugadores" name="jugadores" value="dosJugadores"> ' + 
+            '<label for="dosJugadores" class="radio">Dos Jugadores</label>' +
+            '<p>Elige simbolo jugador 1</p>',
+        input: 'radio',
+        inputOptions: inputOptions,
+        focusConfirm: false,
+        showCloseButton:true,
+        confirmButtonText: 'Empezamos',
+        buttonsStyling: false,
+        customClass: {
+            confirmButton: 'btn btn-warning',
+        }
+    })
+    Swal.getConfirmButton().onclick = function() {
+        player1 = document.getElementById('swal-input1').value;
+        player2 = document.getElementById('swal-input2').value;
+        jugadores = document.querySelector('input[name="jugadores"]:checked').value;
+        selection = Swal.getInput().value;
+        console.log(Swal.getInput().value)
+        Swal.close();
+        // ocultarObjetos(headline);
+        // mostrarObjetos(cuerpoJuego);
         comenzar();
-        btn2.style.display = 'none';
     }
 }
 
-btn2.onclick = function(){
-    modal1.style.display = "block";
-    btn2.style.display = 'none';
-}
 
 // para iniciar otra partida.
 
-function reinicio(){
-    modal2.style.display = "none";
-    document.getElementById('headline').style.marginTop = '150px';
-    document.getElementById('titulo').style.display = 'block';
-    document.getElementById('myBtn').style.display = 'initial';
-    document.getElementById('tablero').style.display = 'none';
-    document.getElementById('queJugador').style.display = 'none';
-    btn2.style.display = 'block';
-
+function reinicio(alcance){
+    // modal2.style.display = "none";
+    // document.getElementById('headline').style.marginTop = '150px';
+    // document.getElementById('titulo').style.display = 'block';
+    // document.getElementById('myBtn').style.display = 'initial';
+    // document.getElementById('tablero').style.display = 'none';
+    // document.getElementById('queJugador').style.display = 'none';
+    // btn2.style.display = 'block';
+    if (alcance == 'total'){
+        forma1 = "";
+        forma2 = "";
+        player1 = '';
+        player2 = '';
+    }
     turno = 0;
-    forma1 = "";
-    forma2 = "";
-    player1 = '';
-    player2 = '';
     ganador = "";
     perdedor = '';
     bloques = {bloq1:0,bloq2:0,bloq3:0,bloq4:0,bloq5:0,bloq6:0,bloq7:0,bloq8:0,bloq9:0}
@@ -85,34 +95,29 @@ function reinicio(){
 }
 
 // Cuando se clickea <span> (x), se cierran los modales
-span.onclick = function() {
-modal1.style.display = "none";
-}
+// span.onclick = function() {
+// modal1.style.display = "none";
+// }
 
-span2.onclick = function() {
-    modal2.style.display = "none";
-    }
+// span2.onclick = function() {
+//     modal2.style.display = "none";
+//     }
 
 // Si se aprieta fuera del modal se cierra.
-window.onclick = function(event) {
-    if (event.target == modal1) {
-        modal1.style.display = "none";
-    }
-}
+// window.onclick = function(event) {
+//     if (event.target == modal1) {
+//         modal1.style.display = "none";
+//     }
+// }
 
 // cuando cliqueo el boton comenzar dentro del modal de inicio se ajustan posiciones y aparece el tablero.
 
 function comenzar(){
 
-    jugadores = document.querySelector('input[name="jugadores"]:checked').value;
-    player1 = document.querySelector('#player1').value;
     if(jugadores == 'unJugador'){
         player2 = 'Skynet';
-    } else {
-        player2 = document.querySelector('#player2').value;
     }
-    let selection = document.querySelector('input[name="razon"]:checked').value;
-
+    
     // nombres de jugadores y seleccion de figura
 
     document.getElementById('nombrep1').innerHTML = player1
@@ -130,7 +135,7 @@ function comenzar(){
         forma2 = cruz;
     }
 
-    modal1.style.display = "none";
+    // modal1.style.display = "none";
     document.getElementById('headline').style.marginTop = '10px';
     document.getElementById('titulo').style.display = 'none';
     document.getElementById('myBtn').style.display = 'none';
@@ -195,17 +200,16 @@ function comprobacion() {
                 perdedor = player1;
             }
             guardarDatos('ganador');
-            document.getElementById('jugadorGanador').innerHTML = ganador;
-            document.getElementById('jugadorGanador').style.display = 'block';
-            modal2.style.display = "block";
+            mensajeGanador ('ganador');
             break;
         }
     }
     if (bloques.bloq1 == 1 && bloques.bloq2 == 1 && bloques.bloq3 == 1 && bloques.bloq4 == 1 && bloques.bloq5 == 1 && bloques.bloq6 == 1 && bloques.bloq7 == 1 && bloques.bloq8 == 1 && bloques.bloq9 == 1 && ganador === '') {
-        guardarDatos('empate')
-        document.getElementById('jugadorGanador').innerHTML = "Empate";
-        document.getElementById('jugadorGanador').style.display = 'block';
-        modal2.style.display = "block";
+        guardarDatos('empate');
+        mensajeGanador ('empate');
+        // document.getElementById('jugadorGanador').innerHTML = "Empate";
+        // document.getElementById('jugadorGanador').style.display = 'block';
+        // modal2.style.display = "block";
 
     }
 
@@ -389,6 +393,37 @@ function guardarDatos(resultado) {
             break;
         default:
             break;
+    }
+}
+
+function mensajeGanador (resultado){
+    let title = '';
+    if (resultado == 'ganador'){
+        title = `Ganaste ${ganador}`
+        
+    } else {
+        title = 'Empate';
+    }
+    Swal.fire({
+        title: title,
+        showCloseButton:true,
+        confirmButtonText: 'Jugar otra',
+        showCancelButton: true,
+        buttonsStyling: false,
+        customClass: {
+            confirmButton: 'btn btn-warning',
+        }
+    })
+    Swal.getConfirmButton().onclick = function() {
+        reinicio();
+        Swal.close();
+        // ocultarObjetos(headline);
+        // mostrarObjetos(cuerpoJuego);
+        comenzar();
+    }
+    Swal.getCancelButton().onclick = function() {
+        reinicio('total');
+        Swal.close();
     }
 }
 
