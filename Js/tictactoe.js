@@ -9,7 +9,8 @@ let listaPerdedores = JSON.parse(localStorage.getItem('ticTacLoss'));
 // botones
 
 let btn = document.getElementById("myBtn");
-
+let tablero = document.getElementById("tablero");
+let headline = document.getElementById("headline");
 
 // variables globales
 
@@ -59,8 +60,6 @@ btn.onclick = function() {
         selection = Swal.getInput().value;
         console.log(Swal.getInput().value)
         Swal.close();
-        // ocultarObjetos(headline);
-        // mostrarObjetos(cuerpoJuego);
         comenzar();
     }
 }
@@ -69,13 +68,7 @@ btn.onclick = function() {
 // para iniciar otra partida.
 
 function reinicio(alcance){
-    // modal2.style.display = "none";
-    // document.getElementById('headline').style.marginTop = '150px';
-    // document.getElementById('titulo').style.display = 'block';
-    // document.getElementById('myBtn').style.display = 'initial';
-    // document.getElementById('tablero').style.display = 'none';
-    // document.getElementById('queJugador').style.display = 'none';
-    // btn2.style.display = 'block';
+
     if (alcance == 'total'){
         forma1 = "";
         forma2 = "";
@@ -93,22 +86,6 @@ function reinicio(alcance){
     }
 
 }
-
-// Cuando se clickea <span> (x), se cierran los modales
-// span.onclick = function() {
-// modal1.style.display = "none";
-// }
-
-// span2.onclick = function() {
-//     modal2.style.display = "none";
-//     }
-
-// Si se aprieta fuera del modal se cierra.
-// window.onclick = function(event) {
-//     if (event.target == modal1) {
-//         modal1.style.display = "none";
-//     }
-// }
 
 // cuando cliqueo el boton comenzar dentro del modal de inicio se ajustan posiciones y aparece el tablero.
 
@@ -135,7 +112,6 @@ function comenzar(){
         forma2 = cruz;
     }
 
-    // modal1.style.display = "none";
     document.getElementById('headline').style.marginTop = '10px';
     document.getElementById('titulo').style.display = 'none';
     document.getElementById('myBtn').style.display = 'none';
@@ -177,7 +153,6 @@ const condicionGanar = [
 ];
 
 
-
 // funcion que detecta cuando terminar el juego
 
 function comprobacion() {
@@ -207,12 +182,7 @@ function comprobacion() {
     if (bloques.bloq1 == 1 && bloques.bloq2 == 1 && bloques.bloq3 == 1 && bloques.bloq4 == 1 && bloques.bloq5 == 1 && bloques.bloq6 == 1 && bloques.bloq7 == 1 && bloques.bloq8 == 1 && bloques.bloq9 == 1 && ganador === '') {
         guardarDatos('empate');
         mensajeGanador ('empate');
-        // document.getElementById('jugadorGanador').innerHTML = "Empate";
-        // document.getElementById('jugadorGanador').style.display = 'block';
-        // modal2.style.display = "block";
-
     }
-
 }
 
 
@@ -232,21 +202,19 @@ function juego(casilla){
                 juegoAutonomo(dificultad);
             }
 
-            } else{
+        } else{
             document.getElementById(`tarjetas${casilla}`).style.backgroundImage = `url("${forma2}")`;
             bloques[`bloq${casilla}`] = 1;
             signo[`bloq${casilla}`] = forma2;
             turno = 1;
             document.getElementById('queJugador').innerHTML = `Es el turno de: ${player1}`;
             comprobacion();
-
             }
     } else {
         // poner cartel de casillero ocupado
     }
     
 }
-
 
 
 const juegoAutonomo = async (dificultad) => {
@@ -407,24 +375,36 @@ function mensajeGanador (resultado){
     Swal.fire({
         title: title,
         showCloseButton:true,
+        allowOutsideClick:false,
         confirmButtonText: 'Jugar otra',
         showCancelButton: true,
         buttonsStyling: false,
         customClass: {
             confirmButton: 'btn btn-warning',
+            cancelButton: 'btn btn-secondary'
         }
     })
     Swal.getConfirmButton().onclick = function() {
         reinicio();
         Swal.close();
-        // ocultarObjetos(headline);
-        // mostrarObjetos(cuerpoJuego);
         comenzar();
     }
     Swal.getCancelButton().onclick = function() {
         reinicio('total');
+        ocultarObjetos(tablero);
+        mostrarObjetos(headline);
         Swal.close();
     }
 }
 
+
+function ocultarObjetos(objetivo){
+    objetivo.classList.add('hidden');
+}
+
+function mostrarObjetos (objetivo){
+    objetivo.classList.remove('hidden');
+}
+
 //  falta comprobacion de formularios en modal de inicio.
+// selector de dificultad!
