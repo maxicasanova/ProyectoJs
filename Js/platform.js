@@ -1,10 +1,12 @@
+// variables para el localStorage
 
-let player1 = '';
-const delay = ms => new Promise(res => setTimeout(res, ms));
-const retardarDraw = async () => {
-    await delay(2500);
-    draw();
-}
+let listaPlataforma = JSON.parse(localStorage.getItem('plataforma'));
+
+// variables del DOM
+
+let btn = document.getElementById("myBtn");
+let headline = document.querySelector('#headline');
+let pausa = document.querySelector('#pausa');
 
 // canvas
 
@@ -82,6 +84,8 @@ function creadorLadrillos(nivel){
     }
 }
 
+// variables generales
+
 let puntos = 0;
 let vidas = 3;
 let sumaLadrillos = 0;
@@ -89,11 +93,12 @@ let comienzo = 1;
 let cambioVida = 0;
 let reiniciado = 0;
 let nivel = 1;
-
-// botones
-
-let btn = document.getElementById("myBtn");
-let btn2 = document.getElementById("myBtn2");
+let player1 = '';
+const delay = ms => new Promise(res => setTimeout(res, ms));
+const retardarDraw = async () => {
+    await delay(2500);
+    draw();
+}
 
 
 // cuando se aprieta boton de inicio se abre modal de inicio
@@ -115,6 +120,9 @@ btn.onclick = function() {
     Swal.getConfirmButton().onclick = function() {
         player1 = Swal.getInput().value;
         Swal.close();
+        mostrarObjetos(canvas);
+        mostrarObjetos(pausa)
+        ocultarObjetos(headline);
         comenzar();
     }
 }
@@ -145,22 +153,17 @@ function keyUpHandler(e) {
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
-document.addEventListener("mousemove", mouseMoveHandler, false);
+canvas.addEventListener("mousemove", mouseMoveHandler, false);
 document.addEventListener('touchstart', touchHandler, true);
 document.addEventListener('touchmove', touchHandler, true);
 document.addEventListener('touchend', touchHandler, true);
 document.addEventListener('touchcancel', touchHandler, true);
-
+pausa.addEventListener("click", pausaReanuda, false);
 
 // funcion comenzar
 
 function comenzar(){
     document.getElementById('nombrep1').innerHTML = player1;
-    // document.getElementById('headline').style.margin = '10px';
-    // document.getElementById('titulo').style.display = 'none';
-    // btn.style.display = 'none';
-    canvas.style.display = "flex";
-    canvas.style.flexWrap = "wrap";
     if(reiniciado == 1) {
         puntos = 0;
         vidas = 3;
@@ -168,9 +171,10 @@ function comenzar(){
         comienzo = 1;
         nivel = 1;
     } 
-    // else if (reiniciado == 2){
-    //     // cambioVida = 0;
-    // }
+
+    // ver que pasa cuando se pierde!
+
+
     creadorLadrillos(nivel);
     inicial();
 }
@@ -216,11 +220,6 @@ function reinicio(numero){
         Swal.close();
         comenzar();
     }
-    document.getElementById('headline').style.marginTop = '150px';
-    document.getElementById('titulo').style.display = 'block';
-    btn.style.display = 'initial';
-    canvas.style.display = 'none';
-    // btn2.style.display = 'block';
     reiniciado = numero;
 }
 
@@ -400,9 +399,7 @@ function movPlat (){
 
 function mouseMoveHandler(e) {
     let relativeX = e.clientX - canvas.offsetLeft;
-    if(relativeX > 0 && relativeX < canvas.width) {
-        plataformaX = relativeX - plataformaAncho/2;
-    }
+    plataformaX = relativeX;
 }
 
 function touchHandler(e) {
@@ -419,6 +416,8 @@ function touchHandler(e) {
 function draw() {
     cambioVida = 0
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     movPlat ();
     dibujoPlataforma();
     dibujoLadrillos();
@@ -440,7 +439,7 @@ function draw() {
     }
     if ((sumaLadrillos > 0 && vidas > 0) || comienzo == 1)  {
         if (cambioVida == 0){
-            requestAnimationFrame(draw);
+            reqAnim = requestAnimationFrame(draw);
         } else if (cambioVida == 1){
             inicial();
         }
@@ -448,17 +447,45 @@ function draw() {
     } else if (sumaLadrillos == 0 ){
         reinicio(2);
     } else if (!vidas){
+        controlStorage();
         reinicio(1);
     }
 }
 
 
-//seleccion de mouse o teclas.
+// funciones para mostrar y ocultar indicaciones del juego.
+
+function ocultarObjetos(objetivo){
+    objetivo.classList.add('hidden');
+}
+
+function mostrarObjetos (objetivo){
+    objetivo.classList.remove('hidden');
+}
+
+// funcion para pasuar el juego.
+
+function pausaReanuda (){
+    if (pausa.innerHTML == 'Pausa'){
+        cancelAnimationFrame(reqAnim);
+        pausa.innerHTML = 'Continua';
+    } else if (pausa.innerHTML == 'Continua'){
+        requestAnimationFrame(draw);
+        pausa.innerHTML = 'Pausa';
+    }
+}
+
+// funcion para controlar si hay registros en el storage, sino, escribirlo.
+
+function controlStorage () {
+    if(listaPlataforma){
+        listaPlataforma.push({nombre: player1, puntos: puntos, nivel: nivel});
+    }else{
+        listaPlataforma = [{nombre: player1, puntos: puntos, nivel: nivel}];
+    }
+    localStorage.setItem('plataforma', JSON.stringify(listaPlataforma));
+}
+
 // 3 2 1 antes de comenzar.
 
-// ver velocidad de inicio.
-// definir clases para limpiar el codigo
 // anotar puntos para el ranking.
-// swal en vez de los modales.
-
-// agregar una pausa! window.cancelAnimationFrame(requestID); probar!

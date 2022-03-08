@@ -6,6 +6,7 @@ let listaSolitario = JSON.parse(localStorage.getItem('solitario'));
 
 let tablero = document.querySelector('#solitario');
 let headline = document.querySelector('#headline');
+let btn = document.getElementById("myBtn");
 let btnDeshacer = document.getElementById('btnDeshacer');
 let btnReiniciar = document.getElementById('btnReiniciar');
 let cuerpoJuego = document.querySelector('#cuerpoJuego');
@@ -16,8 +17,6 @@ let nombreDom = document.querySelector('#cuerpoJuego').childNodes[1].childNodes[
 let mazo1 = '';
 let mazo2 = '';
 
-let btn = document.getElementById("myBtn");
-
 // variables globales.
 
 const puntosCarta = 5;
@@ -26,6 +25,7 @@ const puntosMazo = 50;
 
 let time0 = Date.now();
 let puntos = 0;
+let puntosDes = 0;
 let suits = ["spades", "diamonds", "clubs", "hearts"];
 let values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 let padreOrigen = '';
@@ -44,7 +44,6 @@ function comenzar(){
     for (let i = 0; i < 9; i++) {
         const columnas = document.createElement('div');
         columnas.className = 'columna';
-        columnas.style.left = `${i*24+8}px`;
         columnas.style.top = '16px';
         columnas.style.position= 'relative';
         tablero.appendChild(columnas);
@@ -199,7 +198,11 @@ function renderDeck(deck){
 
 // event listeners
 
-btn.onclick = function() {
+tablero.addEventListener('dragover', function(e){
+    e.preventDefault();
+}, false);
+
+btn.addEventListener('click', function() {
 
     Swal.fire({
         title: 'Bienvenido!',
@@ -217,14 +220,14 @@ btn.onclick = function() {
     Swal.getConfirmButton().onclick = function() {
         nombreDom.innerHTML = name.value;
         Swal.close();
+        time0 = Date.now();
         ocultarObjetos(headline);
         mostrarObjetos(cuerpoJuego);
-        console.log(nombreDom);
         comenzar();
         renderDeck(mazo);
         myInterval = setInterval(clock, 1000);
     }
-}
+})
 
 
 tablero.addEventListener('dragover', function(e){
@@ -245,12 +248,14 @@ document.addEventListener('drop',function(e) {
             draggableElement.style.marginTop = '0px';
             dropzone.appendChild(draggableElement);
             puntos += puntosCarta;
+            puntosDes = puntos;
         } else if (dropzone.className == 'diamonds carta' || dropzone.className == 'hearts carta'){
             if (draggableElement.className == 'clubs carta' || draggableElement.className == 'spades carta') {
                 if (numeroDrop2 == numeroDrag2 + 1){
                     draggableElement.style.marginTop = '0px';
                     dropzone.appendChild(draggableElement);
                     puntos += puntosCarta;
+                    puntosDes = puntos;
                 }
             }
         } else if (dropzone.className == 'clubs carta' || dropzone.className == 'spades carta'){
@@ -259,6 +264,7 @@ document.addEventListener('drop',function(e) {
                     draggableElement.style.marginTop = '0px';
                     dropzone.appendChild(draggableElement);
                     puntos += puntosCarta;
+                    puntosDes = puntos;
                 }
             }
         } else if(/\bsubcolumna\b/.test(dropzone.className)){
@@ -273,6 +279,7 @@ document.addEventListener('drop',function(e) {
                     dropzone.parentNode.appendChild(draggableElement);
                 }
                 puntos += puntosAses;
+                puntosDes = puntos;
                 draggableElement.draggable = false;
             }
         } 
@@ -289,6 +296,7 @@ document.addEventListener('drop',function(e) {
     e.dataTransfer.clearData();
     mostrarPuntos();
     controlGanador();
+    console.log(tiempoDom.innerHTML, puntos);
 }, false);
 
 
@@ -314,6 +322,7 @@ document.addEventListener('dblclick', function(e){
             e.target.style.marginTop = 0;
             subcolumna.appendChild(e.target);
             puntos += puntosAses;
+            puntosDes = puntos;
             e.target.draggable = false;
         }
     }
@@ -334,13 +343,15 @@ btnDeshacer.onclick = function(){
         padreAnterior.prepend(cartaAnterior);
     } else {
         padreAnterior.appendChild(cartaAnterior);
+        puntos -= puntosDes;
+        mostrarPuntos();
+        if (cartaDestapada){
+            padreAnterior.childNodes[(padreAnterior.childNodes.length-2)].classList.add('dorso');
+            padreAnterior.childNodes[(padreAnterior.childNodes.length-2)].draggable = false;
+            cartaAnterior.style.marginTop = '-62px';
+        }
     }
-    if (cartaDestapada){
-        padreAnterior.childNodes[(padreAnterior.childNodes.length-2)].classList.add('dorso');
-        padreAnterior.childNodes[(padreAnterior.childNodes.length-2)].draggable = false;
-        cartaAnterior.style.marginTop = '-62px';
-        cartaDestapada = 0;
-    }
+    cartaDestapada = 0;
 }
 
 btnReiniciar.onclick = function(){
@@ -350,6 +361,7 @@ btnReiniciar.onclick = function(){
     mazo = shuffle(deck1);
     comenzar();
     renderDeck(mazo);
+    mostrarPuntos();
     time0 = Date.now();
     myInterval = setInterval(clock, 1000);
 }
@@ -406,10 +418,8 @@ function mostrarObjetos (objetivo){
 function controlStorage () {
     if(listaSolitario){
         listaSolitario.push({nombre: nombreDom.innerHTML, tiempo: tiempoDom.innerHTML, puntos: puntos});
-        console.log('push')
     }else{
         listaSolitario = [{nombre: nombreDom.innerHTML, tiempo: tiempoDom.innerHTML, puntos: puntos}];
-        console.log('otro')
     }
     localStorage.setItem('solitario', JSON.stringify(listaSolitario));
 }
@@ -426,3 +436,4 @@ function ganar(){
 }
 
 //animacion de final partida.
+

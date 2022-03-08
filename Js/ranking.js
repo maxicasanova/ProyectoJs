@@ -1,14 +1,15 @@
 // section del tic tac toe.
 
 let ticTac = document.querySelector('#ranTictactoe');
-let solitario = document.querySelector('#ranSolitario')
+let solitario = document.querySelector('#ranSolitario');
+let plataforma = document.querySelector('#ranPlat');
 
 let ticTacRankWin = JSON.parse(window.localStorage.getItem('ticTacWin'));
 let ticTacRankDraw = JSON.parse(window.localStorage.getItem('ticTacDraw'));
 let ticTacRankLoss = JSON.parse(window.localStorage.getItem('ticTacLoss'));
 
 let listaSolitario = JSON.parse(window.localStorage.getItem('solitario'));
-
+let listaPlataforma = JSON.parse(window.localStorage.getItem('plataforma'));
 
 if(ticTacRankWin || ticTacRankDraw || ticTacRankLoss){
     const encabezado = document.createElement('tr');
@@ -31,7 +32,6 @@ if(ticTacRankWin){
     }
 }
 
-
 if(ticTacRankDraw){
     for (let i = 0; i < ticTacRankDraw.length; i++) {
         let cadaUno = ticTacRankDraw[i];
@@ -46,7 +46,6 @@ if(ticTacRankDraw){
         }
     }
 }
-
 
 if(ticTacRankLoss){
     for (let i = 0; i < ticTacRankLoss.length; i++) {
@@ -73,8 +72,23 @@ if(listaSolitario){
         let cadaUno = listaSolitario[i];
         let fila = document.createElement("tr");
         fila.id = cadaUno.nombre;
-        fila.innerHTML = `<td>${cadaUno.nombre}</td><td>${cadaUno.veces}</td><td>${cadaUno.veces}</td>`;
+        fila.innerHTML = `<td>${cadaUno.nombre}</td><td>${cadaUno.tiempo}</td><td>${cadaUno.puntos}</td>`;
         solitario.appendChild(fila);
+    }
+}
+
+// section de plataforma
+
+if(listaPlataforma){
+    const encabezado = document.createElement('tr');
+    encabezado.innerHTML = '<th>Nombre</th><th>Puntos</th><th>Nivel</th>';
+    plataforma.appendChild(encabezado);
+    for (let i = 0; i < listaPlataforma.length; i++) {
+        let cadaUno = listaPlataforma[i];
+        let fila = document.createElement("tr");
+        fila.id = cadaUno.nombre;
+        fila.innerHTML = `<td>${cadaUno.nombre}</td><td>${cadaUno.puntos}</td><td>${cadaUno.nivel}</td>`;
+        plataforma.appendChild(fila);
     }
 }
 

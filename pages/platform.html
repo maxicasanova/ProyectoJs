@@ -10,20 +10,28 @@
 </head>
 <body>
     <header>
-        <a href="../index.html">Menu</a>
+        <ul>
+            <li><a href="../index.html">Menu</a></li>
+            <li id="reglamento">Reglas</li>
+        </ul>
     </header>
-    <section class="headline" id="headline">
-        <h1 id="titulo">Plataformas</h1>
-        <div class="jugador1">
-            <h2 id="nombrep1">Jugador 1</h2>
+    <section id="headline">
+        <div class="headline">
+            <h1 id="titulo">Plataformas</h1>
+            <div class="jugador1">
+                <h2 id="nombrep1">Jugador 1</h2>
+            </div>
+            <button class="btn btn-dark" id="myBtn">Inicio</button>
         </div>
-        <button class="btn btn-warning" id="myBtn">Inicio</button>
-        <!-- <button class="btn btn-dark" id="myBtn2">Cambiar Jugadores</button> -->
     </section>
     <section  class="row justify-content-center">
-        <canvas id="myCanvas" width="320" height="480" ></canvas>
+        <canvas id="myCanvas" class="hidden" width="320" height="480" ></canvas>
     </section>
-    
+    <section class="row justify-content-center">
+        <button id="pausa" class="hidden btn btn-dark">Pausa</button>
+    </section>
+
+    <script src="../Js/controlesComunes.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../Js/platform.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

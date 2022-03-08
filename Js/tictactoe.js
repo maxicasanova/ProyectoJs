@@ -12,6 +12,7 @@ let btn = document.getElementById("myBtn");
 let tablero = document.getElementById("tablero");
 let headline = document.getElementById("headline");
 
+
 // variables globales
 
 const delay = ms => new Promise(res => setTimeout(res, ms));

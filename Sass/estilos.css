@@ -1,3 +1,48 @@
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0 !important;
+  background: linear-gradient(-45deg, #eebd52, #ffd18c, #fcc897, #fdc65e);
+  background-size: 400% 400%;
+  -webkit-animation: gradient 15s ease infinite;
+          animation: gradient 15s ease infinite;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+#tituloPrincipal {
+  padding: 20px;
+}
+
+@-webkit-keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .row {
   margin: 0 !important;
   margin-right: 0 !important;
@@ -12,22 +57,71 @@ p {
   margin: 0;
 }
 
+a {
+  text-decoration: none;
+  color: #fafafa;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #f3aa0d;
+}
+
+a:active {
+  text-decoration: none;
+}
+
+header {
+  background-color: #000000;
+  padding: 10px;
+}
+
+header ul {
+  margin: 0 !important;
+  list-style-type: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 20px;
+  padding: 5px;
+}
+
+header li {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
+
+header li:hover {
+  text-decoration: none;
+  color: #f3aa0d;
+}
+
 div.caja {
   margin-top: 50px;
   padding: 20px;
-  background-color: #ffc400;
+  background-color: black;
   border: 2px solid black;
+  border-radius: 20px;
+  -webkit-box-shadow: 5px 5px rgba(0, 0, 0, 0.4);
+          box-shadow: 5px 5px rgba(0, 0, 0, 0.4);
 }
 
 #tablero {
-  width: 500px;
+  width: 75vw;
   display: none;
   margin: auto;
 }
 
 section div.tarjeta {
-  width: 150px;
-  height: 150px;
+  width: 25vw;
+  height: 25vw;
   cursor: pointer;
   background-position: center;
   background-size: cover;
@@ -79,28 +173,44 @@ div.jugador1, div.jugador2 {
 
 #myCanvas {
   border: 1px solid black;
-  display: none;
   height: 70vh;
+  margin-top: 30px;
 }
 
-@media only screen and (max-width: 400px) {
-  #myCanvas {
-    width: 90%;
-  }
+#pausa {
+  margin-top: 10px;
 }
 
 #cuerpoJuego ul {
+  margin: 0 !important;
+  list-style-type: none;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-pack: distribute;
       justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   gap: 20px;
+  background-color: antiquewhite;
+  padding: 5px;
+}
+
+#cuerpoJuego li {
+  text-decoration: none;
 }
 
 #solitario {
-  width: 800px;
-  height: 400px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  min-height: 80vh;
+  width: 80%;
+  margin-left: 10%;
   background-color: green;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -178,22 +288,69 @@ div.jugador1, div.jugador2 {
   background-image: url(../media/solitario/spades.png);
 }
 
+.dorso {
+  background-image: url("../media/solitario/cardBack.png");
+  background-position: center;
+  background-size: cover;
+}
+
 .dorso p {
   visibility: hidden;
 }
 
 #mazo1 {
-  background-color: black;
+  background-image: url("../media/solitario/cardBack.png");
+  background-position: center;
+  background-size: cover;
 }
 
 #mazo1 .carta {
   display: none;
 }
 
-#ranTictactoe ul {
+#resultados {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  gap: 20px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+}
+
+#ranTictactoe, #ranPlat, #ranSolitario {
+  border-spacing: 0px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+#ranTictactoe th, #ranPlat th, #ranSolitario th {
+  background-color: black;
+  color: white;
+  padding: 10px;
+}
+
+#ranTictactoe td, #ranPlat td, #ranSolitario td {
+  padding: 10px;
+  border-bottom: 1px solid black;
+}
+
+@media only screen and (max-width: 400px) {
+  #myCanvas {
+    width: 90%;
+  }
+}
+
+@media only screen and (min-width: 700px) {
+  #tablero {
+    width: 60vh;
+  }
+  section div.tarjeta {
+    width: 20vh;
+    height: 20vh;
+  }
 }
 /*# sourceMappingURL=estilos.css.map */
