@@ -9,9 +9,10 @@ let listaPerdedores = JSON.parse(localStorage.getItem('ticTacLoss'));
 // botones
 
 let btn = document.getElementById("myBtn");
-let tablero = document.getElementById("tablero");
+let tablero = document.getElementById("tableroSolitario");
 let headline = document.getElementById("headline");
-
+let titulo = document.getElementById('titulo');
+let queJugador = document.getElementById('queJugador');
 
 // variables globales
 
@@ -28,114 +29,11 @@ let jugadores = '';
 let selection = '';
 let ganador = "";
 let perdedor = '';
+let errorTicTac = new Audio('../media/sonidos/errorTicTac.wav');
+let tapTicTac = new Audio('../media/sonidos/tapTicTac.wav');
 
-// cuando se aprieta boton de inicio se abre modal de inicio
-
-
-btn.onclick = function() {
-    let inputOptions = {circulo:'circulo', cruz: 'cruz'}
-    Swal.fire({
-        title: 'Bienvenido!',
-        html:
-            '<input id="swal-input1" class="swal2-input" placeholder = "Jugador 1">' + '<br>' +
-            '<input id="swal-input2" class="swal2-input" placeholder = "Jugador 2">' + 
-            '<input type="radio" id="unJugador" name="jugadores" value="unJugador">' +
-            '<label for="unJugador" class="radio">Un Jugador</label>' +
-            '<input type="radio" id="dosJugadores" name="jugadores" value="dosJugadores"> ' + 
-            '<label for="dosJugadores" class="radio">Dos Jugadores</label>' +
-            '<p>Elige simbolo jugador 1</p>',
-        input: 'radio',
-        inputOptions: inputOptions,
-        focusConfirm: false,
-        showCloseButton:true,
-        confirmButtonText: 'Empezamos',
-        buttonsStyling: false,
-        customClass: {
-            confirmButton: 'btn btn-warning',
-        }
-    })
-    Swal.getConfirmButton().onclick = function() {
-        player1 = document.getElementById('swal-input1').value;
-        player2 = document.getElementById('swal-input2').value;
-        jugadores = document.querySelector('input[name="jugadores"]:checked').value;
-        selection = Swal.getInput().value;
-        console.log(Swal.getInput().value)
-        Swal.close();
-        comenzar();
-    }
-}
-
-
-// para iniciar otra partida.
-
-function reinicio(alcance){
-
-    if (alcance == 'total'){
-        forma1 = "";
-        forma2 = "";
-        player1 = '';
-        player2 = '';
-    }
-    turno = 0;
-    ganador = "";
-    perdedor = '';
-    bloques = {bloq1:0,bloq2:0,bloq3:0,bloq4:0,bloq5:0,bloq6:0,bloq7:0,bloq8:0,bloq9:0}
-    signo = {bloq1:"",bloq2:"",bloq3:"",bloq4:"",bloq5:"",bloq6:"",bloq7:"",bloq8:"",bloq9:""}
-
-    for (let i = 0; i < 9; i++) {
-        document.getElementById(`tarjetas${(i+1)}`).style.backgroundImage = '';
-    }
-
-}
-
-// cuando cliqueo el boton comenzar dentro del modal de inicio se ajustan posiciones y aparece el tablero.
-
-function comenzar(){
-
-    if(jugadores == 'unJugador'){
-        player2 = 'Skynet';
-    }
-    
-    // nombres de jugadores y seleccion de figura
-
-    document.getElementById('nombrep1').innerHTML = player1
-    document.getElementById('nombrep2').innerHTML = player2
-
-    if(selection == 'circulo'){
-        document.getElementById('forma1').src = cruz;
-        document.getElementById('forma2').src = circulo;
-        forma1 = cruz;
-        forma2 = circulo;
-    }else{
-        document.getElementById('forma1').src = circulo;
-        document.getElementById('forma2').src = cruz;
-        forma1 = circulo;
-        forma2 = cruz;
-    }
-
-    document.getElementById('headline').style.marginTop = '10px';
-    document.getElementById('titulo').style.display = 'none';
-    document.getElementById('myBtn').style.display = 'none';
-    document.getElementById('tablero').style.display = "flex";
-    document.getElementById('tablero').style.flexWrap = "wrap";
-
-    let empieza = Math.round(Math.random()) + 1;
-
-    if (empieza == 1){
-        document.getElementById('queJugador').innerHTML = `Es el turno de: ${player1}`;
-        document.getElementById('queJugador').style.display = 'block';
-        turno = 1;
-
-    } else {
-        document.getElementById('queJugador').innerHTML = `Es el turno de: ${player2}`;
-        document.getElementById('queJugador').style.display = 'block';
-        turno = 2;
-        if(jugadores == 'unJugador'){
-            juegoAutonomo(dificultad);
-        }
-    }
-
-}
+errorTicTac.volume = 0.05;
+tapTicTac.volume = 0.05;
 
 // variables necesarias para la funcion comprobacion y juego
 
@@ -153,6 +51,103 @@ const condicionGanar = [
     [3, 5, 7]
 ];
 
+// cuando se aprieta boton de inicio se abre modal de inicio
+
+btn.onclick = function() {
+    let inputOptions = {circulo:'Circulo', cruz: 'Cruz'}
+    Swal.fire({
+        title: 'Bienvenido!',
+        html:
+            '<input id="swal-input1" class="swal2-input" placeholder = "Jugador 1">' + '<br>' +
+            '<input id="swal-input2" class="swal2-input" placeholder = "Jugador 2">' + '<br>' +
+            '<input type="radio" id="unJugador" name="jugadores" value="unJugador">' + 
+            '<label for="unJugador" class="radio">1 Jugador</label>' + '<br>' +
+            '<input type="radio" id="dosJugadores" name="jugadores" value="dosJugadores"> ' + 
+            '<label for="dosJugadores" class="radio">2 Jugadores</label>' +
+            '<p>Elige simbolo jugador 1</p>',
+        input: 'radio',
+        inputOptions: inputOptions,
+        focusConfirm: false,
+        showCloseButton:true,
+        confirmButtonText: 'Empezamos',
+        buttonsStyling: false,
+        customClass: {
+            confirmButton: 'btn btn-warning',
+        }
+    })
+    Swal.getConfirmButton().onclick = function() {
+        player1 = document.getElementById('swal-input1').value;
+        player2 = document.getElementById('swal-input2').value;
+        jugadores = document.querySelector('input[name="jugadores"]:checked').value;
+        selection = Swal.getInput().value;
+        Swal.close();
+        comenzar();
+    }
+}
+
+// para iniciar otra partida.
+
+function reinicio(alcance){
+
+    if (alcance == 'total'){
+        forma1 = "";
+        forma2 = "";
+        player1 = '';
+        player2 = '';
+        ocultarObjetos(tablero);
+        ocultarObjetos(queJugador);
+        mostrarObjetos(titulo);
+        mostrarObjetos(btn);
+    }
+    turno = 0;
+    ganador = "";
+    perdedor = '';
+    bloques = {bloq1:0,bloq2:0,bloq3:0,bloq4:0,bloq5:0,bloq6:0,bloq7:0,bloq8:0,bloq9:0}
+    signo = {bloq1:"",bloq2:"",bloq3:"",bloq4:"",bloq5:"",bloq6:"",bloq7:"",bloq8:"",bloq9:""}
+
+    for (let i = 0; i < 9; i++) {
+        document.getElementById(`tarjetas${(i+1)}`).style.backgroundImage = '';
+    }
+}
+
+// cuando cliqueo el boton comenzar dentro del modal de inicio se ajustan posiciones y aparece el tablero.
+
+function comenzar(){
+
+    if(jugadores == 'unJugador') player2 = 'Skynet';
+    document.getElementById('nombrep1').innerHTML = player1
+    document.getElementById('nombrep2').innerHTML = player2
+
+    if(selection == 'circulo'){
+        document.getElementById('forma1').src = cruz;
+        document.getElementById('forma2').src = circulo;
+        forma1 = cruz;
+        forma2 = circulo;
+    }else{
+        document.getElementById('forma1').src = circulo;
+        document.getElementById('forma2').src = cruz;
+        forma1 = circulo;
+        forma2 = cruz;
+    }
+
+    mostrarObjetos(tablero);
+    mostrarObjetos(queJugador);
+    ocultarObjetos(titulo);
+    ocultarObjetos(btn);
+
+    let empieza = Math.round(Math.random()) + 1;
+
+    if (empieza == 1){
+        queJugador.innerHTML = `Es el turno de: ${player1}`;
+        mostrarObjetos(queJugador);
+        turno = 1;
+    } else {
+        queJugador.innerHTML = `Es el turno de: ${player2}`;
+        mostrarObjetos(queJugador);
+        turno = 2;
+        if(jugadores == 'unJugador') juegoAutonomo(dificultad);
+    }
+}
 
 // funcion que detecta cuando terminar el juego
 
@@ -163,9 +158,7 @@ function comprobacion() {
         condB = condicionGanar[i][1];
         condC = condicionGanar[i][2];
 
-        if (signo[`bloq${condA}`] === '' || signo[`bloq${condB}`] === '' || signo[`bloq${condC}`]=== '') {
-            continue;
-        }
+        if (signo[`bloq${condA}`] === '' || signo[`bloq${condB}`] === '' || signo[`bloq${condC}`]=== '') continue;
 
         if (signo[`bloq${condA}`] == signo[`bloq${condB}`] && signo[`bloq${condB}`] == signo[`bloq${condC}`]) {
             if (forma1 == signo[`bloq${condC}`]){
@@ -186,7 +179,6 @@ function comprobacion() {
     }
 }
 
-
 // funcion que muestra las imagenes
 
 function juego(casilla){
@@ -198,25 +190,20 @@ function juego(casilla){
             signo[`bloq${casilla}`] = forma1;
             turno = 2;
             document.getElementById('queJugador').innerHTML = `Es el turno de: ${player2}`;
-            comprobacion();
-            if(jugadores == 'unJugador'){
-                juegoAutonomo(dificultad);
-            }
-
+            if(jugadores == 'unJugador') juegoAutonomo(dificultad);
         } else{
             document.getElementById(`tarjetas${casilla}`).style.backgroundImage = `url("${forma2}")`;
             bloques[`bloq${casilla}`] = 1;
             signo[`bloq${casilla}`] = forma2;
             turno = 1;
             document.getElementById('queJugador').innerHTML = `Es el turno de: ${player1}`;
-            comprobacion();
-            }
+        }
+    comprobacion();
+    if (permitirEfectos) tapTicTac.play();
     } else {
-        // poner cartel de casillero ocupado
+        if (permitirEfectos) errorTicTac.play();
     }
-    
 }
-
 
 const juegoAutonomo = async (dificultad) => {
     await delay(2500);
@@ -369,9 +356,10 @@ function mensajeGanador (resultado){
     let title = '';
     if (resultado == 'ganador'){
         title = `Ganaste ${ganador}`
-        
+        if (permitirEfectos) victoria.play();
     } else {
         title = 'Empate';
+        if (permitirEfectos) gameOver.play();
     }
     Swal.fire({
         title: title,
@@ -396,15 +384,6 @@ function mensajeGanador (resultado){
         mostrarObjetos(headline);
         Swal.close();
     }
-}
-
-
-function ocultarObjetos(objetivo){
-    objetivo.classList.add('hidden');
-}
-
-function mostrarObjetos (objetivo){
-    objetivo.classList.remove('hidden');
 }
 
 //  falta comprobacion de formularios en modal de inicio.

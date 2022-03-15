@@ -7,16 +7,25 @@
     <title>Tic-Tac-Toe</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
     <link rel="stylesheet" href="../Sass/estilos.css">
+    <link rel="shortcut icon" href="https://img.icons8.com/external-inipagistudio-mixed-inipagistudio/64/000000/external-games-school-from-home-inipagistudio-mixed-inipagistudio.png" type="image/x-icon">
 </head>
 <body>
     <header>
         <ul>
-            <li><a href="../index.html">Menu</a></li>
-            <li id="reglamento">Reglas</li>
+            <li><a href="../index.html">Inicio</a></li>
+            <li id="reglamento"><img src="https://img.icons8.com/material-rounded/24/000000/rules.png" title="Reglas"></li>
+            <li id="musica">
+                <img src="https://img.icons8.com/material/24/000000/music--v2.png" id="musicOn" class="hidden" title="Detener Musica">
+                <img src="https://img.icons8.com/material/24/000000/mute.png" id="musicOff" title="Activar Musica">
+            </li>
+            <li id="efectos">
+                <img src="https://img.icons8.com/material/24/000000/high-volume--v1.png" id="efectosOn" title="Desactivar Efectos">
+                <img src="https://img.icons8.com/material/24/000000/sound-speaker.png" id="efectosOff" class="hidden" title="Activar Efectos">
+            </li>
         </ul>
     </header>
     <section class="container headline" id="headline">
-        <h1 id="titulo">Tic Tac Toe</h1>
+        <h1 id="titulo">Tic-Tac-Toe</h1>
         <div class="jugador1">
             <h2 id="nombrep1">Jugador 1</h2>
             <img id="forma1" src="https://img.icons8.com/emoji/48/000000/cross-mark-emoji.png">
@@ -25,26 +34,26 @@
             <h2 id="nombrep2">Jugador 2</h2>
             <img id="forma2" src="https://img.icons8.com/ios-filled/50/26e07f/circled.png">
         </div>
-        <h3 id="queJugador">Juega el jugador...</h3>
+        <h3 id="queJugador" class="hidden">Juega el jugador...</h3>
         <button class="btn btn-dark" id="myBtn">Inicio</button>
     </section>
 
-
     <!-- Tablero de juego -->
 
-
-    <section id="tablero">
-        <div class="tarjetas tarjeta" id="tarjetas1" onclick="juego(1)"></div>
-        <div class="tarjetas tarjeta" id="tarjetas2" onclick="juego(2)"></div>
-        <div class="tarjetas tarjeta" id="tarjetas3" onclick="juego(3)"></div>
-        <div class="tarjetas tarjeta" id="tarjetas4" onclick="juego(4)"></div>
-        <div class="tarjetas tarjeta" id="tarjetas5" onclick="juego(5)"></div>
-        <div class="tarjetas tarjeta" id="tarjetas6" onclick="juego(6)"></div>
-        <div class="tarjetas tarjeta" id="tarjetas7" onclick="juego(7)"></div>
-        <div class="tarjetas tarjeta" id="tarjetas8" onclick="juego(8)"></div>
-        <div class="tarjetas tarjeta" id="tarjetas9" onclick="juego(9)"></div>
+    <section class="hidden" id="tableroSolitario">
+        <div id="tablero">
+            <div class="tarjetas tarjeta" id="tarjetas1" onclick="juego(1)"></div>
+            <div class="tarjetas tarjeta" id="tarjetas2" onclick="juego(2)"></div>
+            <div class="tarjetas tarjeta" id="tarjetas3" onclick="juego(3)"></div>
+            <div class="tarjetas tarjeta" id="tarjetas4" onclick="juego(4)"></div>
+            <div class="tarjetas tarjeta" id="tarjetas5" onclick="juego(5)"></div>
+            <div class="tarjetas tarjeta" id="tarjetas6" onclick="juego(6)"></div>
+            <div class="tarjetas tarjeta" id="tarjetas7" onclick="juego(7)"></div>
+            <div class="tarjetas tarjeta" id="tarjetas8" onclick="juego(8)"></div>
+            <div class="tarjetas tarjeta" id="tarjetas9" onclick="juego(9)"></div>
+        </div>
     </section>
-
+    
     <script src="../Js/controlesComunes.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../Js/tictactoe.js"></script>

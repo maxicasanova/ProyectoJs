@@ -5,10 +5,13 @@ html, body {
 
 body {
   margin: 0 !important;
-  background: linear-gradient(-45deg, #eebd52, #ffd18c, #fcc897, #fdc65e);
+  background: linear-gradient(-45deg, #ffe6e6, #f7c9c6, #f5dada, #ffffff);
   background-size: 400% 400%;
   -webkit-animation: gradient 15s ease infinite;
           animation: gradient 15s ease infinite;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 h2 {
@@ -60,11 +63,12 @@ p {
 a {
   text-decoration: none;
   color: #fafafa;
+  font-weight: 500;
 }
 
 a:hover {
   text-decoration: none;
-  color: #f3aa0d;
+  color: #000000;
 }
 
 a:active {
@@ -72,8 +76,11 @@ a:active {
 }
 
 header {
-  background-color: #000000;
+  background-color: #c74f4f;
+  border-bottom: #ffffff solid 2px;
   padding: 10px;
+  -webkit-box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+          box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 }
 
 header ul {
@@ -101,12 +108,14 @@ header li {
 header li:hover {
   text-decoration: none;
   color: #f3aa0d;
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
 }
 
 div.caja {
   margin-top: 50px;
   padding: 20px;
-  background-color: black;
+  background-color: #c74f4f;
   border: 2px solid black;
   border-radius: 20px;
   -webkit-box-shadow: 5px 5px rgba(0, 0, 0, 0.4);
@@ -115,8 +124,12 @@ div.caja {
 
 #tablero {
   width: 75vw;
-  display: none;
   margin: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 
 section div.tarjeta {
@@ -127,6 +140,7 @@ section div.tarjeta {
   background-size: cover;
   border-radius: 5px;
   border: 1px solid grey;
+  background-color: white;
 }
 
 .headline {
@@ -145,7 +159,7 @@ section div.tarjeta {
           align-items: center;
   gap: 5px;
   text-align: center;
-  margin-top: 150px;
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 
@@ -163,10 +177,6 @@ div.jugador1, div.jugador2 {
   gap: 30px;
 }
 
-#queJugador {
-  display: none;
-}
-
 #myBtn {
   width: 100px;
 }
@@ -181,6 +191,10 @@ div.jugador1, div.jugador2 {
   margin-top: 10px;
 }
 
+#cuerpoJuego {
+  background-color: green;
+}
+
 #cuerpoJuego ul {
   margin: 0 !important;
   list-style-type: none;
@@ -193,12 +207,13 @@ div.jugador1, div.jugador2 {
       -ms-flex-align: center;
           align-items: center;
   gap: 20px;
-  background-color: antiquewhite;
+  background-color: black;
   padding: 5px;
 }
 
 #cuerpoJuego li {
   text-decoration: none;
+  color: #ffffff;
 }
 
 #solitario {
@@ -219,8 +234,10 @@ div.jugador1, div.jugador2 {
 }
 
 .columna {
+  top: 16px;
   width: 58px;
   height: 368px;
+  position: relative;
   display: inline-block;
   vertical-align: middle;
 }
@@ -239,6 +256,7 @@ div.jugador1, div.jugador2 {
 .subcolumna {
   width: 58px;
   height: 80px;
+  position: relative;
   background-color: rgba(0, 0, 0, 0.5);
   display: inline-block;
   border: solid 1px #aaa;
@@ -254,7 +272,7 @@ div.jugador1, div.jugador2 {
   border-radius: 9px;
   width: 58px;
   height: 80px;
-  background-color: white;
+  background-size: cover;
   cursor: -webkit-grab !important;
   cursor: grab !important;
 }
@@ -336,6 +354,10 @@ div.jugador1, div.jugador2 {
 #ranTictactoe td, #ranPlat td, #ranSolitario td {
   padding: 10px;
   border-bottom: 1px solid black;
+}
+
+.swal2-container {
+  z-index: 10000;
 }
 
 @media only screen and (max-width: 400px) {

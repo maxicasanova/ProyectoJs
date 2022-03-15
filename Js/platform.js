@@ -21,13 +21,13 @@ let y = canvas.height-canvas.height*0.1;
 // incrementos
 let dx = canvas.width * 0.0042;
 let dy = -canvas.height * 0.00625;
-let radioBola = canvas.height*0.016;
+const radioBola = canvas.height*0.016;
 let velocidadPlat = canvas.width * 0.0146;
 
 //plataforma
 
-let plataformaAlto = canvas.height*0.02;
-let plataformaAncho = canvas.width*0.15;
+const plataformaAlto = canvas.height*0.02;
+const plataformaAncho = canvas.width*0.15;
 let plataformaX = (canvas.width-plataformaAncho)/2;
 
 // capturadores de teclas
@@ -37,21 +37,31 @@ let izquierda = false
 
 // grid de ladrillos
 
-let marginLadTop = canvas.height * 0.1;
-let marginLadIzq = canvas.width * 0.0625;
-
-let filasLad = 9;
-let columnasLad = Math.round(canvas.width/30);
-let anchoLad = (canvas.width / (columnasLad+2));
-let altoLad = canvas.height * 0.03;
-
-let paddingH = 2;
-let paddingV = altoLad / 2;
-
+const marginLadTop = canvas.height * 0.1;
+const marginLadIzq = canvas.width * 0.0625;
+const filasLad = 9;
+const columnasLad = Math.round(canvas.width/30);
+const anchoLad = (canvas.width / (columnasLad+2));
+const altoLad = canvas.height * 0.03;
+const paddingH = 2;
+const paddingV = altoLad / 2;
+const coloresLadrillos = ["#FF6746", "#A92003", "#5E1101"]
+const sonidoPlat = new Audio('../media/sonidos/plataforma.wav');
+const sonidoToc = new Audio('../media/sonidos/card-tap.wav');
+sonidoPlat.volume = 0.05;
+sonidoToc.volume = 0.05;
 
 let ladrillos = []
+let otrosNiveles = '';
+
+let nivelesExt = async function () {
+    const resp = await fetch('../JSON/nivelesPlat.json');
+    otrosNiveles = await resp.json();
+}
+
+window.onload = nivelesExt();
+
 function creadorLadrillos(nivel){
-    
     for (let c = 0; c < columnasLad; c++) {
         ladrillos [c] = [];
         for (let r = 0; r < filasLad; r++) {
@@ -59,15 +69,11 @@ function creadorLadrillos(nivel){
             ladrillos[c][r].x = marginLadIzq + c*(anchoLad+paddingH);
             ladrillos[c][r].y = marginLadTop + r*(altoLad+paddingV);
             if (nivel == 1){
-                if (c % 3 == 0){
-                    ladrillos[c][r].estado = 0;
-                }
+                if (c % 3 == 0) ladrillos[c][r].estado = 0;
             }else if (nivel == 2 || nivel == 3){
                 if( r % 2 == 0){
                     ladrillos[c][r].estado = 2;
-                    if ( nivel == 3 && c % 3 == 0){
-                        ladrillos[c][r].estado = 3;
-                    }
+                    if ( nivel == 3 && c % 3 == 0) ladrillos[c][r].estado = 3;
                 }
             } else if (nivel == 4){
                 if(r>2 && r<6){
@@ -75,10 +81,10 @@ function creadorLadrillos(nivel){
                 } else if (r>5){
                     ladrillos[c][r].estado = 3;
                 }
-            } else if( nivel >= 5 && nivel <10){
+            } else if( nivel == 5){
                 ladrillos[c][r].estado = Math.round(Math.random()*3);
-            } else if (nivel == 10){
-
+            } else if (nivel == 6){
+                ladrillos[c][r].estado = otrosNiveles.nivel6[c][r];
             }
         }
     }
@@ -100,7 +106,6 @@ const retardarDraw = async () => {
     draw();
 }
 
-
 // cuando se aprieta boton de inicio se abre modal de inicio
 
 btn.onclick = function() {
@@ -114,7 +119,7 @@ btn.onclick = function() {
         confirmButtonText: 'Empezamos',
         buttonsStyling: false,
         customClass: {
-            confirmButton: 'btn btn-warning',
+            confirmButton: 'btn btn-danger',
         }
     });
     Swal.getConfirmButton().onclick = function() {
@@ -126,7 +131,6 @@ btn.onclick = function() {
         comenzar();
     }
 }
-
 
 // funciones que detectan las teclas
 
@@ -147,7 +151,6 @@ function keyUpHandler(e) {
         izquierda = false;
     }
 }
-
 
 // event listeners
 
@@ -173,8 +176,6 @@ function comenzar(){
     } 
 
     // ver que pasa cuando se pierde!
-
-
     creadorLadrillos(nivel);
     inicial();
 }
@@ -187,18 +188,20 @@ function reinicio(numero){
             confirmButtonText: 'Jugar de nuevo',
             buttonsStyling: false,
             customClass: {
-                confirmButton: 'btn btn-warning',
+                confirmButton: 'btn btn-danger',
             }
         });
     } else if (numero == 2){
         if (nivel == 10){
+
+            //  ojo aca esto esta mal!
             Swal.fire({
                 title: 'Perdiste!',
                 showCloseButton:true,
                 confirmButtonText: 'Jugar de nuevo',
                 buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn btn-warning',
+                    confirmButton: 'btn btn-danger',
                 }
                 // ver boton de cancelacion o salir.
             });
@@ -211,7 +214,7 @@ function reinicio(numero){
                 confirmButtonText: 'Siguiente Nivel',
                 buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn btn-warning',
+                    confirmButton: 'btn btn-danger',
                 }
             });
         }
@@ -270,31 +273,15 @@ function dibujoLadrillos(){
     for (let c = 0; c < columnasLad; c++) {
         for (let r = 0; r < filasLad; r++) {
             visible = ladrillos[c][r].estado
-            if (visible == 1){
+            if (visible > 0 && visible < 4 ){
                 ctx.beginPath();
                 ctx.rect(ladrillos[c][r].x, ladrillos[c][r].y, anchoLad, altoLad);
-                ctx.fillStyle = "#FF6746";
+                ctx.fillStyle = coloresLadrillos[visible - 1];
                 ctx.fill();
                 ctx.strokeStyle = "black";
                 ctx.stroke();
                 ctx.closePath();
-            } else if (visible == 2){
-                ctx.beginPath();
-                ctx.rect(ladrillos[c][r].x, ladrillos[c][r].y, anchoLad, altoLad);
-                ctx.fillStyle = "#A92003";
-                ctx.fill();
-                ctx.strokeStyle = "black";
-                ctx.stroke();   
-                ctx.closePath();
-            } else if (visible == 3){
-                ctx.beginPath();
-                ctx.rect(ladrillos[c][r].x, ladrillos[c][r].y, anchoLad, altoLad);
-                ctx.fillStyle = "#5E1101";
-                ctx.fill();
-                ctx.strokeStyle = "black";
-                ctx.stroke();
-                ctx.closePath();
-            }
+            } 
         }
     }
 }
@@ -321,7 +308,6 @@ function dibujoNivel() {
     ctx.stroke();
 }
 
-
 // funcion que detecta colisiones
 
 function detectarLadrillos(){
@@ -329,7 +315,6 @@ function detectarLadrillos(){
         for (let r = 0; r < filasLad; r++) {
             visible = ladrillos[c][r].estado
             if (((y + dy == ladrillos[c][r].y - radioBola || y + dy == ladrillos[c][r].y + altoLad + radioBola) || (y + dy > ladrillos[c][r].y && y + dy < ladrillos[c][r].y + altoLad)) && (x + dx > ladrillos[c][r].x && x + dx < ladrillos[c][r].x + anchoLad) && visible > 0){
-                
                 ladrillos[c][r].estado--;
                 puntos++;
                 if(ladrillos[c][r].estado == 0 && nivel > 2){
@@ -339,10 +324,12 @@ function detectarLadrillos(){
                 }else {
                     dy = -dy;
                 }
+                if (permitirEfectos) sonidoToc.play();
             } else if (((x + dx == ladrillos[c][r].x + radioBola|| x + dx == ladrillos[c][r].x + anchoLad - radioBola) || (x + dx > (ladrillos[c][r].x +radioBola) && x + dx < (ladrillos[c][r].x + anchoLad - radioBola))) && (y + dy < ladrillos[c][r].y && y + dy > ladrillos[c][r].y + altoLad) && visible > 0){
                 dx = -dx;
                 ladrillos[c][r].estado--;
                 puntos++;
+                if (permitirEfectos) sonidoToc.play();
             }
         }
     }
@@ -350,17 +337,13 @@ function detectarLadrillos(){
 
 function detectarBordes(){
 
-    if(x + dx > (canvas.width - radioBola) || x + dx < radioBola) {
-        dx = -dx
-    }
-
+    if(x + dx > (canvas.width - radioBola) || x + dx < radioBola) dx = -dx;
     if(y + dy < (radioBola+25)) {
         dy = -dy;
-        
     } else if((y + dy) >= canvas.height-radioBola-plataformaAlto*2) {
         if((x + radioBola/2) > (plataformaX + plataformaAncho*0.2) && ((x - radioBola/2) < (plataformaX + plataformaAncho*0.8))) {
                 dy = -dy;
-
+                if (permitirEfectos) sonidoPlat.play();
         } else if(((x + radioBola/2) > plataformaX) && ((x - radioBola/2) < (plataformaX + plataformaAncho*0.2))){
             if (dx<0){
                 dy = -dy;
@@ -368,6 +351,7 @@ function detectarBordes(){
                 dy = -dy;
                 dx = -dx * 1.05;
             }
+            if (permitirEfectos) sonidoPlat.play();
         } else if(((x + radioBola/2) > (plataformaX + plataformaAncho*0.8)) && ((x - radioBola/2) < (plataformaX + plataformaAncho))){
             if (dx>0){
                 dy = -dy;
@@ -375,12 +359,12 @@ function detectarBordes(){
                 dy = -dy;
                 dx = -dx * 1.05;
             }
+            if (permitirEfectos) sonidoPlat.play();
         }else {
             if(y + dy > canvas.height-plataformaAlto){
                 vidas--;
-                if (vidas > 0){
-                    cambioVida = 1
-                }
+                if (vidas > 0) cambioVida = 1;
+                if (permitirEfectos) gameOver.play();
             }
         }
     }
@@ -446,21 +430,12 @@ function draw() {
         comienzo = 0;
     } else if (sumaLadrillos == 0 ){
         reinicio(2);
+        if (permitirEfectos) victoria.play();
     } else if (!vidas){
+        if (permitirEfectos) gameOver.play();
         controlStorage();
         reinicio(1);
     }
-}
-
-
-// funciones para mostrar y ocultar indicaciones del juego.
-
-function ocultarObjetos(objetivo){
-    objetivo.classList.add('hidden');
-}
-
-function mostrarObjetos (objetivo){
-    objetivo.classList.remove('hidden');
 }
 
 // funcion para pasuar el juego.
@@ -488,4 +463,5 @@ function controlStorage () {
 
 // 3 2 1 antes de comenzar.
 
-// anotar puntos para el ranking.
+// que pasa en el ultimo nivel
+

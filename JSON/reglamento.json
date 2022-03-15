@@ -1,0 +1,5 @@
+{
+    "Solitario": "Bienvenido! El objetivo del juego es acomodar todas las cartas en las columnas de la derecha. Si o si comenzando por los Ases y continuando por sus numeros sucesivos. En las otras columnas se pueden poner colores alternados solamente. Ademas cuando quede una columna vacia solo podras colocar los reyes, letras K. Si das muchas vueltas al mazo, perderas muchos puntos! Suerte!",
+    "Tic-Tac-Toe": "Bienvenido! Puedes jugar con un amigo o contra Skynet pero no te lo recomiendo! Si aun asi te arriegas selecciona un jugador. Es indispensable que nos digas tu nombre y que selecciones circulo o cruz! Una vez comenzado el juego te dira quien debe jugar!",
+    "Plataformas": "Bienvenido! Este juego de plataformas nos permite hacer rebotar la pelota moviendo la plataforma con el mouse, las teclas o incluso en dispositivos tactiles! Habra varios niveles, aumentando su dificultad. En los niveles mas altos ten cuidado cuando desaparezcan los ladrillos! Diviertete solo tienes 3 vidas!"
+}
