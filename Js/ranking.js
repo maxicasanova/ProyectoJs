@@ -11,56 +11,51 @@ let ticTacRankLoss = JSON.parse(window.localStorage.getItem('ticTacLoss'));
 let listaSolitario = JSON.parse(window.localStorage.getItem('solitario'));
 let listaPlataforma = JSON.parse(window.localStorage.getItem('plataforma'));
 
+
 if(ticTacRankWin || ticTacRankDraw || ticTacRankLoss){
     const encabezado = document.createElement('tr');
+    encabezado.id = 'heading';
     encabezado.innerHTML = '<th>Nombre</th><th>Victorias</th><th>Empates</th><th>Derrotas</th>';
     ticTac.appendChild(encabezado);
 }
 
-if(ticTacRankWin){
-    for (let i = 0; i < ticTacRankWin.length; i++) {
-        let cadaUno = ticTacRankWin[i];
+if(ticTacRankWin) construirTicTac(ticTacRankWin);
+if(ticTacRankDraw) construirTicTac(ticTacRankDraw);
+if(ticTacRankLoss) construirTicTac(ticTacRankLoss);
+
+function construirTicTac(parametro){
+    for (let i = 0; i < parametro.length; i++) {
+        let cadaUno = parametro[i];
+        const filas = [`<td>${cadaUno.nombre}</td><td>${cadaUno.veces}</td><td></td><td></td>`,`<td>${cadaUno.nombre}</td><td></td><td>${cadaUno.veces}</td><td></td>`,`<td>${cadaUno.nombre}</td><td></td><td></td><td>${cadaUno.veces}</td>`]
+        let x = 0;
+        switch (parametro) {
+            case ticTacRankWin:
+                x=1;
+                break;
+            case ticTacRankDraw:
+                x=2;
+                break;
+            case ticTacRankLoss:
+                x=3;
+                break;
+        }
         if(document.getElementById(`${cadaUno.nombre}`)){
             let fila = document.getElementById(`${cadaUno.nombre}`);
-            fila.children[1] = cadaUno.veces;
+            fila.children[x] = cadaUno.veces;
         } else{
             let fila = document.createElement("tr");
             fila.id = cadaUno.nombre;
-            fila.innerHTML = `<td>${cadaUno.nombre}</td><td>${cadaUno.veces}</td><td></td><td></td>`;
+            fila.innerHTML = filas[x-1];
             ticTac.appendChild(fila);
         }
     }
 }
 
-if(ticTacRankDraw){
-    for (let i = 0; i < ticTacRankDraw.length; i++) {
-        let cadaUno = ticTacRankDraw[i];
-        if(document.getElementById(`${cadaUno.nombre}`)){
-            let fila = document.getElementById(`${cadaUno.nombre}`);
-            fila.children[2].innerHTML = cadaUno.veces;
-        } else{
-            let fila = document.createElement("tr");
-            fila.id = cadaUno.nombre;
-            fila.innerHTML = `<td>${cadaUno.nombre}</td><td></td><td>${cadaUno.veces}</td><td></td>`;
-            ticTac.appendChild(fila);
-        }
-    }
-}
 
-if(ticTacRankLoss){
-    for (let i = 0; i < ticTacRankLoss.length; i++) {
-        let cadaUno = ticTacRankLoss[i];
-        if(document.getElementById(`${cadaUno.nombre}`)){
-            let fila = document.getElementById(`${cadaUno.nombre}`);
-            fila.children[3].innerHTML = cadaUno.veces;
-        } else{
-            let fila = document.createElement("tr");
-            fila.id = cadaUno.nombre;
-            fila.innerHTML = `<td>${cadaUno.nombre}</td><td></td><td></td><td>${cadaUno.veces}</td>`;
-            ticTac.appendChild(fila);
-        }
-    }
-}
+// pensar reducir esto
+
+
+
 
 // section del solitario
 
@@ -91,4 +86,47 @@ if(listaPlataforma){
         plataforma.appendChild(fila);
     }
 }
+
+let encabezado = ticTac.getElementsByTagName('tr')[0]
+sort();
+
+function sort(){
+    if(encabezado){
+        for (const hijo of encabezado.childNodes) {
+            hijo.addEventListener("click", ordenar);
+        }
+    }
+}
+
+function ordenar(e){
+    console.log(e.target.innerHTML) //con esto decido que camino tomar en el orden.
+    let ticTacRows = ticTac.getElementsByTagName('tr');
+    // let lista = [];
+    let listaConValores = [];
+    for (let i = 1; i < ticTacRows.length; i++) {
+        // lista.push(ticTacRows[i].id);
+        listaConValores.push([ticTacRows[i].id,ticTacRows[i].childNodes[1].innerHTML])
+    }
+    // let listaOrdenada = lista.sort();
+    let listaConValoresOrd = listaConValores.sort(function(a, b) {
+        return b[1] - a[1];
+    });
+    let listaIndices = 
+    console.log(listaConValoresOrd)
+    let nuevaTabla = document.createElement("table");
+    nuevaTabla.appendChild(document.getElementById('heading'))
+    console.log(nuevaTabla)
+    console.log(listaConValoresOrd[0])
+    // for (const each of listaOrdenada) {
+    //     (each !== "") && nuevaTabla.appendChild(document.getElementById(each));
+    // }
+    for (const each of listaConValoresOrd[0]) {
+        (each !== "") && nuevaTabla.appendChild(document.getElementById(each));
+    }
+    ticTac.innerHTML = nuevaTabla.innerHTML;
+    encabezado = ticTac.getElementsByTagName('tr')[0]
+    sort();
+}
+
+// chequear la validacion para que no queden id anonimos      
 

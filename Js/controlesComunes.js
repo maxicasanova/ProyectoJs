@@ -82,5 +82,10 @@ function mostrarObjetos (objetivo){
     objetivo.classList.remove('hidden');
 }
 
+// para hacer la primera letra de todos los nombres ingresados uppercase
+
+function capitalize(word) {
+    return word[0].toUpperCase() + word.slice(1).toLowerCase();
+}
 
 

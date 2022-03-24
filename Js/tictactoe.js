@@ -387,4 +387,5 @@ function mensajeGanador (resultado){
 }
 
 //  falta comprobacion de formularios en modal de inicio.
+// actualizar jugador 2.
 // selector de dificultad!

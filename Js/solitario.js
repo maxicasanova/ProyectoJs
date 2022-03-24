@@ -136,19 +136,26 @@ btn.addEventListener('click', function() {
         confirmButtonText: 'Empezamos',
         buttonsStyling: false,
         customClass: {
-            confirmButton: 'btn btn-danger',
+            confirmButton: 'btn btn-danger'
         }
     })
     const name = Swal.getInput()
     Swal.getConfirmButton().onclick = function() {
-        nombreDom.innerHTML = name.value;
-        Swal.close();
-        time0 = Date.now();
-        ocultarObjetos(headline);
-        mostrarObjetos(cuerpoJuego);
-        comenzar();
-        renderDeck(mazo);
-        myInterval = setInterval(clock, 1000);
+        if (name.value !== "") {
+            nombreDom.innerHTML = capitalize(name.value);
+            Swal.close();
+            time0 = Date.now();
+            ocultarObjetos(headline);
+            mostrarObjetos(cuerpoJuego);
+            comenzar();
+            renderDeck(mazo);
+            myInterval = setInterval(clock, 1000);
+        } else {
+            Swal.fire({
+                title: 'Ingrese un nombre!',
+                icon: 'error'
+            });
+        }
     }
 })
 
