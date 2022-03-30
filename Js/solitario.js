@@ -37,9 +37,7 @@ const cardTap = new Audio('../media/sonidos/card-tap.wav');
 sonidoMazo.volume = 0.05;
 cardTap.volume = 0.05;
 
-
-
-// funciones.
+// funciones que empiezan el juego. Interactuan con el otro archivo contructormazo.js
 
 function comenzar(){
 
@@ -151,10 +149,7 @@ btn.addEventListener('click', function() {
             renderDeck(mazo);
             myInterval = setInterval(clock, 1000);
         } else {
-            Swal.fire({
-                title: 'Ingrese un nombre!',
-                icon: 'error'
-            });
+            Swal.showValidationMessage('Asegurese de completar su nombre.');
         }
     }
 })
@@ -225,8 +220,6 @@ document.addEventListener("dragstart", function(e) {
 
 
 tablero.addEventListener('dblclick', function(e){
-
-    // chequear para que no de error en consola.
 
     let idObj = parseInt(e.target.id);
     cartaAnterior = document.getElementById(e.target.id);
@@ -311,11 +304,10 @@ function destaparCartas(){
 function clock() {
     let time1 = Date.now();
     time1= new Date(time1 - time0),
-        hours = time1.getHours() - 21,
         minutes = time1.getMinutes(),
         seconds = time1.getSeconds();
-    
-    tiempoDom.innerHTML = harold(hours) + ":" + harold(minutes) + ":" + harold(seconds);
+
+    tiempoDom.innerHTML =  harold(minutes) + ":" + harold(seconds);
     
     function harold(standIn) {
         if (standIn < 10) {
@@ -335,6 +327,8 @@ function controlStorage () {
     }
     localStorage.setItem('solitario', JSON.stringify(listaSolitario));
 }
+
+// funcion que determina la victoria.
 
 function ganar(){
     clearInterval(myInterval);

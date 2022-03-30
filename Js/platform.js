@@ -123,12 +123,16 @@ btn.onclick = function() {
         }
     });
     Swal.getConfirmButton().onclick = function() {
-        player1 = Swal.getInput().value;
-        Swal.close();
-        mostrarObjetos(canvas);
-        mostrarObjetos(pausa)
-        ocultarObjetos(headline);
-        comenzar();
+        if (!document.getElementById('swal2-input').value) {
+            Swal.showValidationMessage('Asegurese de ingresar el nombre');
+        } else {
+            player1 = capitalize(Swal.getInput().value);
+            Swal.close();
+            mostrarObjetos(canvas);
+            mostrarObjetos(pausa)
+            ocultarObjetos(headline);
+            comenzar();
+        }
     }
 }
 
@@ -174,8 +178,6 @@ function comenzar(){
         comienzo = 1;
         nivel = 1;
     } 
-
-    // ver que pasa cuando se pierde!
     creadorLadrillos(nivel);
     inicial();
 }
@@ -192,19 +194,17 @@ function reinicio(numero){
             }
         });
     } else if (numero == 2){
-        if (nivel == 10){
-
-            //  ojo aca esto esta mal!
+        if (nivel == 6){
             Swal.fire({
-                title: 'Perdiste!',
+                title: 'Terminaste el juego, felicidades!',
                 showCloseButton:true,
                 confirmButtonText: 'Jugar de nuevo',
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'btn btn-danger',
                 }
-                // ver boton de cancelacion o salir.
             });
+            controlStorage();
             numero = 1;
         } else{
             nivel++;
@@ -461,7 +461,4 @@ function controlStorage () {
     localStorage.setItem('plataforma', JSON.stringify(listaPlataforma));
 }
 
-// 3 2 1 antes de comenzar.
-
-// que pasa en el ultimo nivel
 

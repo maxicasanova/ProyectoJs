@@ -1,4 +1,4 @@
-// section del tic tac toe.
+// definicion de variables Globales
 
 let ticTac = document.querySelector('#ranTictactoe');
 let solitario = document.querySelector('#ranSolitario');
@@ -11,6 +11,7 @@ let ticTacRankLoss = JSON.parse(window.localStorage.getItem('ticTacLoss'));
 let listaSolitario = JSON.parse(window.localStorage.getItem('solitario'));
 let listaPlataforma = JSON.parse(window.localStorage.getItem('plataforma'));
 
+// section del tic tac toe.
 
 if(ticTacRankWin || ticTacRankDraw || ticTacRankLoss){
     const encabezado = document.createElement('tr');
@@ -51,12 +52,6 @@ function construirTicTac(parametro){
     }
 }
 
-
-// pensar reducir esto
-
-
-
-
 // section del solitario
 
 if(listaSolitario){
@@ -86,47 +81,5 @@ if(listaPlataforma){
         plataforma.appendChild(fila);
     }
 }
-
-let encabezado = ticTac.getElementsByTagName('tr')[0]
-sort();
-
-function sort(){
-    if(encabezado){
-        for (const hijo of encabezado.childNodes) {
-            hijo.addEventListener("click", ordenar);
-        }
-    }
-}
-
-function ordenar(e){
-    console.log(e.target.innerHTML) //con esto decido que camino tomar en el orden.
-    let ticTacRows = ticTac.getElementsByTagName('tr');
-    // let lista = [];
-    let listaConValores = [];
-    for (let i = 1; i < ticTacRows.length; i++) {
-        // lista.push(ticTacRows[i].id);
-        listaConValores.push([ticTacRows[i].id,ticTacRows[i].childNodes[1].innerHTML])
-    }
-    // let listaOrdenada = lista.sort();
-    let listaConValoresOrd = listaConValores.sort(function(a, b) {
-        return b[1] - a[1];
-    });
-    let listaIndices = 
-    console.log(listaConValoresOrd)
-    let nuevaTabla = document.createElement("table");
-    nuevaTabla.appendChild(document.getElementById('heading'))
-    console.log(nuevaTabla)
-    console.log(listaConValoresOrd[0])
-    // for (const each of listaOrdenada) {
-    //     (each !== "") && nuevaTabla.appendChild(document.getElementById(each));
-    // }
-    for (const each of listaConValoresOrd[0]) {
-        (each !== "") && nuevaTabla.appendChild(document.getElementById(each));
-    }
-    ticTac.innerHTML = nuevaTabla.innerHTML;
-    encabezado = ticTac.getElementsByTagName('tr')[0]
-    sort();
-}
-
-// chequear la validacion para que no queden id anonimos      
+    
 

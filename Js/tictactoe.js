@@ -24,7 +24,6 @@ let forma1 = "";
 let forma2 = "";
 let player1 = '';
 let player2 = '';
-let dificultad = 2;
 let jugadores = '';
 let selection = '';
 let ganador = "";
@@ -76,12 +75,16 @@ btn.onclick = function() {
         }
     })
     Swal.getConfirmButton().onclick = function() {
-        player1 = document.getElementById('swal-input1').value;
-        player2 = document.getElementById('swal-input2').value;
-        jugadores = document.querySelector('input[name="jugadores"]:checked').value;
-        selection = Swal.getInput().value;
-        Swal.close();
-        comenzar();
+        if (!document.getElementById('swal-input1').value || !document.querySelector('input[name="jugadores"]:checked') || !document.querySelector('input[name="swal2-radio"]:checked')) {
+            Swal.showValidationMessage('Asegurese de completar los campos');
+        } else {
+            player1 = capitalize(document.getElementById('swal-input1').value);
+            player2 = capitalize(document.getElementById('swal-input2').value);
+            jugadores = document.querySelector('input[name="jugadores"]:checked').value;
+            selection = Swal.getInput().value;
+            Swal.close();
+            comenzar();
+        }
     }
 }
 
@@ -145,7 +148,7 @@ function comenzar(){
         queJugador.innerHTML = `Es el turno de: ${player2}`;
         mostrarObjetos(queJugador);
         turno = 2;
-        if(jugadores == 'unJugador') juegoAutonomo(dificultad);
+        if(jugadores == 'unJugador') juegoAutonomo();
     }
 }
 
@@ -190,7 +193,7 @@ function juego(casilla){
             signo[`bloq${casilla}`] = forma1;
             turno = 2;
             document.getElementById('queJugador').innerHTML = `Es el turno de: ${player2}`;
-            if(jugadores == 'unJugador') juegoAutonomo(dificultad);
+            if(jugadores == 'unJugador') juegoAutonomo();
         } else{
             document.getElementById(`tarjetas${casilla}`).style.backgroundImage = `url("${forma2}")`;
             bloques[`bloq${casilla}`] = 1;
@@ -205,80 +208,75 @@ function juego(casilla){
     }
 }
 
-const juegoAutonomo = async (dificultad) => {
+// funcion que determina como juega la maquina.
+
+const juegoAutonomo = async () => {
     await delay(2500);
     if (ganador == ''){
-        if (dificultad == 1){
-            aleatorio = Math.round(Math.random() * 9);
-            while (bloques[`bloq${aleatorio}`] == 1) {
-                aleatorio = Math.round(Math.random() * 9);
-            }
-            juego(aleatorio);
-        } else if (dificultad == 2){
-            while (turno == 2) {
-                check = 0;
-                checkElegido = 0;
-                while (check == 0) {
-                    for (let i = 0; i < 8; i++) {
-                        condA = condicionGanar[i][0];
-                        condB = condicionGanar[i][1];
-                        condC = condicionGanar[i][2];
+        while (turno == 2) {
+            check = 0;
+            checkElegido = 0;
+            while (check == 0) {
+                for (let i = 0; i < 8; i++) {
+                    condA = condicionGanar[i][0];
+                    condB = condicionGanar[i][1];
+                    condC = condicionGanar[i][2];
 
-                        if (signo[`bloq${condA}`] !== "" && signo[`bloq${condB}`] === signo[`bloq${condA}`]){
-                            if (signo[`bloq${condC}`] !== ""){
-                                continue;
-                            }
-                            juego(condC);
-                            check = 1;
-                            checkElegido = 1;
-                            break;
-                        } else if (signo[`bloq${condA}`] !== "" && signo[`bloq${condC}`] === signo[`bloq${condA}`]){
-                            if (signo[`bloq${condB}`] !== ""){
-                                continue;
-                            }
-                            juego(condB);
-                            check = 1;
-                            checkElegido = 1;
-                            break;
-                        } else if (signo[`bloq${condC}`] !== "" && signo[`bloq${condB}`] === signo[`bloq${condC}`]){
-                            if (signo[`bloq${condA}`] !== ""){
-                                continue;
-                            }
-                            juego(condA);
-                            check = 1;
-                            checkElegido = 1;
-                            break;
-                        } else {
+                    if (signo[`bloq${condA}`] !== "" && signo[`bloq${condB}`] === signo[`bloq${condA}`]){
+                        if (signo[`bloq${condC}`] !== ""){
                             continue;
                         }
+                        juego(condC);
+                        check = 1;
+                        checkElegido = 1;
+                        break;
+                    } else if (signo[`bloq${condA}`] !== "" && signo[`bloq${condC}`] === signo[`bloq${condA}`]){
+                        if (signo[`bloq${condB}`] !== ""){
+                            continue;
+                        }
+                        juego(condB);
+                        check = 1;
+                        checkElegido = 1;
+                        break;
+                    } else if (signo[`bloq${condC}`] !== "" && signo[`bloq${condB}`] === signo[`bloq${condC}`]){
+                        if (signo[`bloq${condA}`] !== ""){
+                            continue;
+                        }
+                        juego(condA);
+                        check = 1;
+                        checkElegido = 1;
+                        break;
+                    } else {
+                        continue;
                     }
-                    check = 1;
                 }
-                if (checkElegido == 0){
-                    if (bloques.bloq5 != 1){
-                        jugada = 5;
-                        juego(jugada);
-                    } else if ( bloques.bloq1 != 1 || bloques.bloq3 != 1 || bloques.bloq7 != 1 || bloques.bloq9 != 1){
-                        for (let i = 1; i < 10; i=i+2) {
-                            if (bloques[`bloq${i}`] != 1){
-                                jugada = i;
-                                juego(jugada);
-                                break;
-                            }
+                check = 1;
+            }
+            if (checkElegido == 0){
+                if (bloques.bloq5 != 1){
+                    jugada = 5;
+                    juego(jugada);
+                } else if ( bloques.bloq1 != 1 || bloques.bloq3 != 1 || bloques.bloq7 != 1 || bloques.bloq9 != 1){
+                    for (let i = 1; i < 10; i=i+2) {
+                        if (bloques[`bloq${i}`] != 1){
+                            jugada = i;
+                            juego(jugada);
+                            break;
                         }
-                    } else{
-                        jugada = Math.round(Math.random() * 9);
-                        while (bloques[`bloq${jugada}`] == 1) {
-                            jugada = Math.round(Math.random() * 9);
-                        }
-                        juego(jugada);
                     }
+                } else{
+                    jugada = Math.round(Math.random() * 9);
+                    while (bloques[`bloq${jugada}`] == 1) {
+                        jugada = Math.round(Math.random() * 9);
+                    }
+                    juego(jugada);
                 }
             }
         }
     }
 }
 
+// funcion que interactua con el localStorage.
 
 function guardarDatos(resultado) {
     switch (resultado) {
@@ -352,6 +350,8 @@ function guardarDatos(resultado) {
     }
 }
 
+// funcion que determina el fin del juego!
+
 function mensajeGanador (resultado){
     let title = '';
     if (resultado == 'ganador'){
@@ -385,7 +385,3 @@ function mensajeGanador (resultado){
         Swal.close();
     }
 }
-
-//  falta comprobacion de formularios en modal de inicio.
-// actualizar jugador 2.
-// selector de dificultad!
