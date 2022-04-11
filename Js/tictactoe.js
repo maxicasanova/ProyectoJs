@@ -79,7 +79,7 @@ btn.onclick = function() {
             Swal.showValidationMessage('Asegurese de completar los campos');
         } else {
             player1 = capitalize(document.getElementById('swal-input1').value);
-            player2 = capitalize(document.getElementById('swal-input2').value);
+            if(document.getElementById('swal-input2').value) player2 = capitalize(document.getElementById('swal-input2').value);
             jugadores = document.querySelector('input[name="jugadores"]:checked').value;
             selection = Swal.getInput().value;
             Swal.close();
